@@ -66,6 +66,22 @@ fastp_adapters: ""
 
 
 
+##### PARAMETERS FOR CUSTOM SIMULATION R SCRIPTS
+
+# Extra parameters for modifying the provided annotation prior to quantification
+modify_annotation_params: ""
+
+# Extra parameters for filtering the modified annotation
+filter_annotation_params: ""
+
+# Extra gffread parameters or generating transcriptome fasta for simulation
+simulation_gffread_extra: ""
+
+# Extra parameters for simulation with polyester
+simulate_fastas_params: ""
+
+
+
 ##### OTHER FASTP PARAMETERS #####
   # See https://github.com/OpenGene/fastp for details
 

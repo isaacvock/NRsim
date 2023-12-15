@@ -10,6 +10,8 @@ rule modify_annotation:
     threads: 1
     conda:
         "../envs/simulate.yaml"
+    log:
+        "logs/modify_annotation/modify_annotation.log",
     shell:
         """
         chmod +x {params.rscript}

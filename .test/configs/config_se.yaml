@@ -1,0 +1,121 @@
+####### GENERAL INFORMATION ABOUT THIS CONFIG #######
+#
+# This config file allows you to specify a number of important pieces of information that
+# the THE_Aligner pipeline will require to run. It also allows you to set optional parameters
+# for all tools that THE_Aligner makes use of.
+#
+# File paths can either be absolute (e.g., ~/path/to/file/or/directory) or relative
+# to the directory in which you are calling the pipeline from (e.g., data/fastq/WT_1 in the 
+# example samples entry means to look in the data directory present in the directory
+# where you called `snakemake` to run the pipeline).
+#
+####### PARAMETERS YOU NEED TO SET #######
+
+
+# Path to annotation file
+annotation: "data/annotation/genome.gtf"
+
+
+# Path to genome fasta file
+genome: data/genome/genome.fasta 
+
+
+# Path to fastq file to inspire simulated data
+read_1: "data/WT1/WT1_test_R1.fastq.gz"
+
+
+# Path to second read in pair if using paired-end fastq as input
+  # Empty string if using single-end fastq as input
+read_2: ""
+
+
+# Number of replicates to simulate
+number_of_replicates: 3
+
+
+# Path to Salmon indices
+  # Will be created at this directory if not already present
+indices: "indices/"
+
+
+# Strandedness
+  # set to "reverse", "yes", or "no"
+  # reverse means that read 2 represents 5' to 3' sequence of original RNA (read 1 thus represents its reverse complement)
+  # yes means that read 1 represents 5' to 3' sequence of original RNA
+  # no means unstranded
+strandedness: "reverse"
+
+
+# Directionality
+  # Do reads face inwards ("I"), outwards ("O"), or do they match ("M")
+  # Currently only used to determine Salmon library type
+directionality: "I"
+
+
+
+####### OPTIONAL PARAMETERS FOR EACH TOOL USED #######
+
+
+##### PARAMETERS MOST WORTH DOUBLE CHECKING #####
+
+# Adapters to pass to fastp 
+  # Not strictly necessary as fastp can autodetect. Autodetection is more accurate for paired-end data
+  # For paired-end data with widely used Illumina TruSeq adapters, this could be: 
+  # "--adapter_sequence AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
+fastp_adapters: ""
+
+
+
+##### PARAMETERS FOR CUSTOM SIMULATION R SCRIPTS
+
+# Extra parameters for modifying the provided annotation prior to quantification
+modify_annotation_params: ""
+
+# Extra parameters for filtering the modified annotation
+filter_annotation_params: ""
+
+# Extra gffread parameters or generating transcriptome fasta for simulation
+simulation_gffread_extra: ""
+
+# Extra parameters for simulation with polyester
+simulate_fastas_params: ""
+
+
+
+##### OTHER FASTP PARAMETERS #####
+  # See https://github.com/OpenGene/fastp for details
+
+# Optional parameters to set for fastp
+fastp_parameters: "" 
+
+
+
+##### FASTQC PARAMETERS #####
+  # See https://www.bioinformatics.babraham.ac.uk/projects/fastqc/ for details
+
+
+# Run fastqc on input fastqs?
+run_fastqc: False
+
+
+# Optional parameters to set for fastqc
+fastqc_params: ""
+
+
+
+##### SALMON PARAMETERS #####
+
+# Optional parameters to set for salmon index
+salmon_index_params: ""
+
+# Optional parameters to set for salmon quant
+salmon_quant_params: ""
+
+
+
+
+##### GFFREAD PARAMETERS (for creating transcriptome.fasta) #####
+  # See http://ccb.jhu.edu/software/stringtie/gff.shtml#gffread for details
+
+# Extra parameters for gffread
+gffread_extra: ""

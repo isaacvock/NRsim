@@ -29,7 +29,7 @@ rule make_simulation_transcriptome:
     log:
         "logs/make_simulation_transcriptome/gffread.log",
     params:
-        extra=config["gffread_extra"]
+        extra=config["simulation_gffread_extra"]
     conda:
         "../envs/gffread.yaml"
     script: 
