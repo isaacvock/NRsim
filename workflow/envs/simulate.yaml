@@ -9,6 +9,7 @@ dependencies:
   - r-data.table
   - r-readr
   - r-r.utils
+  - r-optparse
   - bioconductor-polyester
   - bioconductor-rtracklayer
   - bioconductor-biostrings
