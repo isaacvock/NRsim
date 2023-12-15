@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches_ignore: []
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Linting
+      uses: snakemake/snakemake-github-action@v1.22.0
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "--configfile .test/configs/config_se.yaml --lint"
+
+  run-workflow:
+    runs-on: ubuntu-latest
+    needs:
+      - linting
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Test workflow (paired-end)
+      uses: snakemake/snakemake-github-action@v1.22.0
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "--configfile .test/configs/config_pe.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Test workflow (single-end)
+      uses: snakemake/snakemake-github-action@v1.22.0
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "--configfile .test/configs/config_se.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
