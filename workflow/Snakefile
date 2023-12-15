@@ -30,10 +30,14 @@ container: "docker://continuumio/miniconda3"
 ##### load rules #####
 
 include: "rules/common.smk"
+include: "rules/preprocess.smk"
+include: "rules/quantify.smk"
+include: "rules/simulate.smk"
+#include: "rules/nrseq.smk"
 
 
 ##### target rules #####
 
 rule all:
     input:
-        get_other_output()
+        get_target_output()

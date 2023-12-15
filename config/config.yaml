@@ -77,6 +77,11 @@ fastp_parameters: ""
 ##### FASTQC PARAMETERS #####
   # See https://www.bioinformatics.babraham.ac.uk/projects/fastqc/ for details
 
+
+# Run fastqc on input fastqs?
+run_fastqc: False
+
+
 # Optional parameters to set for fastqc
 fastqc_params: ""
 

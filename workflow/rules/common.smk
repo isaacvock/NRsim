@@ -29,7 +29,7 @@ def generate_formatted_list(n):
 sample_names = generate_formatted_list(config["number_of_replicates"])
 
 
-SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{S_ID}_{READS}", 
+SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
                             SID = sample_names,
                             READS = READS)
 
@@ -66,25 +66,8 @@ for p in fastq_paths.values():
 
 ### SALMON HELPERS
 
-# Trimmed fastq file paths, used as input for aligners
-
-def get_fastq_r1(wildcards):
-
-    return expand("results/trimmed/read.1.fastq", SID = wildcards.sample)
-
-def get_fastq_r2(wildcards):
-
-    if PE:
-
-        return expand("results/trimmed/read.2.fastq", SID = wildcards.sample)
-
-    else:
-
-        return ""
-
-
-# Libtype string if using salmon
-if config["PE"]:
+# Libtype string
+if PE:
 
     if config["strandedness"] == "reverse":
 
@@ -113,3 +96,14 @@ else:
         LIBTYPE = "U"
 
 
+### Target rule
+
+def get_target_output():
+
+    target = SIMULATION_OUTPUT
+
+    if config["run_fastqc"]:
+
+        target.append(expand("results/fastqc/read{read}.html", read = READ_NAMES))
+
+    return target

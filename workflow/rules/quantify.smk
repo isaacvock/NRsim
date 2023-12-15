@@ -73,8 +73,8 @@ if config["PE"]:
 
     rule quant:
         input:
-            r1=config["read_1"],
-            r2=config["read_2"],
+            r1="results/trimmed/read.1.fastq",
+            r2="results/trimmed/read.2.fastq",
             index=multiext(
                     config["indices"],
                     "complete_ref_lens.bin",
@@ -109,7 +109,7 @@ else:
 
     rule quant:
         input:
-            r=config["read_1"],
+            r="results/trimmed/read.1.fastq",
             index=multiext(
                     config["indices"],
                     "complete_ref_lens.bin",
