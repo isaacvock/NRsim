@@ -1,0 +1,76 @@
+#!/usr/bin/env Rscript
+### PURPOSE OF THIS SCRIPT
+## Filter out transcripts which are low coverage in a real dataset.
+## Will also generate normalized read counts that will be used for simulation
+
+# Load dependencies ------------------------------------------------------------
+
+library(dplyr)
+library(rtracklayer)
+library(GenomicRanges)
+library(optparse)
+
+# Process parameters -----------------------------------------------------------
+
+args <- commandArgs(trailingOnly = TRUE)
+
+option_list <- list(
+  make_option(c("-c", "--counts", type = "character"),
+              help = "Path to csv with read counts for simulation"),
+  make_option(c("-o", "--output", type = "character"),
+              help = "Path to directory to output simulated data"),
+  make_option(c("-f", "--fasta", type = "character"),
+              help = "Path to transcriptome fasta for simulation"),
+  make_option(c("-e", "--error_rate", type = "double"),
+              default = 0.001,
+              help = "Base calling error rate to simulate"),
+  make_option(c("-n", "--nreps", type = "double"),
+              default = 3,
+              help = "Number of replicates to simulate"),
+  make_option(c("-s", "--seed", type = "double"),
+              default = -1,
+              help = "Seed to set for simulation. If < 0, no seed is set"),
+)
+
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser) # Load options from command line.
+
+
+# Modify annotation ------------------------------------------------------------
+
+
+
+# Load read counts
+normalized_reads <- read_csv(opt$counts)
+
+
+# vector of reads
+reads_per_transcript <- round(normalized_reads$norm_reads * library_size)
+
+# Fold changes
+fold_changes <- matrix(1, nrow = nrow(normalized_reads),
+                       ncol = 1)
+
+
+### Simulate
+if (opt$seed < 0) {
+
+  simulate_experiment(fasta = opt$fasta,
+                      outdir = opt$output,
+                      num_reps = opt$nreps,
+                      reads_per_transcript = reads_per_transcript,
+                      fold_changes = fold_changes,
+                      error_rate = opt$error_rate,
+                      strand_specific = TRUE)
+
+}else {
+
+  simulate_experiment(fasta = opt$fasta,
+                      outdir = opt$output,
+                      num_reps = opt$nreps,
+                      reads_per_transcript = reads_per_transcript,
+                      fold_changes = fold_changes,
+                      error_rate = opt$error_rate,
+                      strand_specific = TRUE,
+                      seed = opt$seed)
+}
