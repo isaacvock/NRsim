@@ -33,7 +33,7 @@ option_list <- list(
   make_option(c("-p", "--singleend"),
               action = "store_false",
               default = TRUE,
-              help = "Simulate single end data rather than paired-end"),
+              help = "Simulate single end data rather than paired-end")
 )
 
 opt_parser <- OptionParser(option_list = option_list)

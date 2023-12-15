@@ -25,7 +25,7 @@ option_list <- list(
               help = "Path to modified annotation output"),
   make_option(c("-t", "--tpm", type = "double"),
               default = 3,
-              help = "Minimum TPM required to keep transcript"),
+              help = "Minimum TPM required to keep transcript")
 )
 
 opt_parser <- OptionParser(option_list = option_list)

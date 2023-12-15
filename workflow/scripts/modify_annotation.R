@@ -23,7 +23,7 @@ option_list <- list(
   make_option(c("-c", "--clean"),
               action = "store_false",
               default = TRUE,
-              help = "Remove KI and GL chromosomes"),
+              help = "Remove KI and GL chromosomes")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
