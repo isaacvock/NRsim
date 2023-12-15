@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - snakemake-minimal >=5.24.1
+  - r-base =4.3.1
+  - r-dplyr
+  - r-readr
+  - r-r.utils
+  - bioconductor-polyester
+  - bioconductor-rtracklayer
+  - bioconductor-biostrings
+  - bioconductor-genomicranges
+  - bioconductor-shortread
