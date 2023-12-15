@@ -41,10 +41,10 @@ rule make_transcriptome_fasta:
 # Never make decoy index because I want to quantify intronic content accurately
 rule index:
     input:
-        sequences=SALMON_TRANSCRIPTOME,
+        sequences="results/make_transcriptome_fasta/transcriptome.fasta",
     output:
         multiext(
-            config["indices"],
+            INDEX_PATH,
             "complete_ref_lens.bin",
             "ctable.bin",
             "ctg_offsets.bin",
@@ -78,7 +78,7 @@ if config["PE"]:
             r1="results/trimmed/read.1.fastq",
             r2="results/trimmed/read.2.fastq",
             index=multiext(
-                    config["indices"],
+                    INDEX_PATH,
                     "complete_ref_lens.bin",
                     "ctable.bin",
                     "ctg_offsets.bin",
@@ -113,7 +113,7 @@ else:
         input:
             r="results/trimmed/read.1.fastq",
             index=multiext(
-                    config["indices"],
+                    INDEX_PATH,
                     "complete_ref_lens.bin",
                     "ctable.bin",
                     "ctg_offsets.bin",

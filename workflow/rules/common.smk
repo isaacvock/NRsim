@@ -37,8 +37,13 @@ SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta",
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
 
-# Directory containing index; used in case of certain aligners
-INDEX_DIR = config["indices"]
+# Make life easier for users and catch if they add a '/' at the end of their path
+# to alignment indices. If so, remove it to avoid double '/' 
+if config["indices"].endswith('/'):
+    INDEX_PATH = str(config["indices"])
+    INDEX_PATH = INDEX_PATH[:-1]
+else:
+    INDEX_PATH = str(config["indices"])
 
 # Get input fastq files for first step
 if PE:
