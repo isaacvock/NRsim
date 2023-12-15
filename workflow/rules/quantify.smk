@@ -71,7 +71,7 @@ rule index:
 
 
 
-if config["PE"]:
+if PE:
 
     rule quant:
         input:
