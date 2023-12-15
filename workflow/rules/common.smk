@@ -41,9 +41,8 @@ SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta",
 # to alignment indices. If so, remove it to avoid double '/' 
 if config["indices"].endswith('/'):
     INDEX_PATH = str(config["indices"])
-    INDEX_PATH = INDEX_PATH[:-1]
 else:
-    INDEX_PATH = str(config["indices"])
+    INDEX_PATH = str(config["indices"]) + "/"
 
 # Get input fastq files for first step
 if PE:
