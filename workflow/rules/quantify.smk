@@ -1,15 +1,20 @@
 # Make modified gtf for qunatification
-rule modify_gtf:
+rule modify_annotation:
     input:
         gtf=config["annotation"]
     output:
-        mod_gtf="results/modify_gtf/modified_annotation.gtf"
+        mod_gtf="results/modify_annotation/modified_annotation.gtf"
     params:
-        rscript=workflow.source_path("../scripts/modify_gtf.R")
+        rscript=workflow.source_path("../scripts/modify_annotation.R"),
+        extra=config["modify_annotation_params"]
     threads: 1
     conda:
         "../envs/simulate.yaml"
     shell:
+        """
+        chmod +x {params.rscript}
+        {params.rscript} -g {input.gtf} -o {output.mod_gtf} {params.extra}
+        """
 
 # Make transcriptome fasta from genome fasta + gtf
 rule make_transcriptome_fasta:
