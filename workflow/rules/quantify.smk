@@ -22,7 +22,7 @@ rule modify_annotation:
 rule make_transcriptome_fasta:
     input:
         fasta=config["genome"],
-        annotation="results/modify_gtf/modified_annotation.gtf",
+        annotation="results/modify_annotation/modified_annotation.gtf",
     output:
         records="results/make_transcriptome_fasta/transcriptome.fasta",
     threads: 1
