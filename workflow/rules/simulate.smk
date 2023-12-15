@@ -46,6 +46,8 @@ rule simulate_fastas:
     threads: 1
     log:
         "logs/simulate_fastas/simulate_fastas.log"
+    conda:
+        "../envs/simulate.yaml"
     params:
         rscript=workflow.source_path("../scripts/simulate.R"),
         nreps=config["number_of_replicates"],
