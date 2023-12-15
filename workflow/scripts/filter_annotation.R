@@ -17,10 +17,12 @@ args <- commandArgs(trailingOnly = TRUE)
 option_list <- list(
   make_option(c("-g", "--gtf", type = "character"),
               help = "Path to user-provided annotation"),
-  make_option(c("-o", "--output", type = "character"),
-              help = "Path to modified annotation output"),
   make_option(c("-q", "--quant", type = "character"),
               help = "Path to RNA-seq quantification file"),
+  make_option(c("-c", "--counts", type = "character"),
+              help = "Path to RNA-seq read counts for simulation"),
+  make_option(c("-o", "--output", type = "character"),
+              help = "Path to modified annotation output"),
   make_option(c("-t", "--tpm", type = "double"),
               default = 3,
               help = "Minimum TPM required to keep transcript"),
@@ -130,3 +132,12 @@ mcols(final_gr) <- gtf_filter %>%
 
 rtracklayer::export(final_gr, con = opt$output)
 
+
+
+# Generate read counts to be used in simulation
+
+normalized_reads <- quant_filter %>%
+  ungroup() %>%
+  mutate(norm_reads = NumReads/sum(NumReads))
+
+write_csv(normalized_reads, file = opt$counts)

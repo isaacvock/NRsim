@@ -30,6 +30,10 @@ option_list <- list(
   make_option(c("-s", "--seed", type = "double"),
               default = -1,
               help = "Seed to set for simulation. If < 0, no seed is set"),
+  make_option(c("-p", "--singleend"),
+              action = "store_false",
+              default = TRUE,
+              help = "Simulate single end data rather than paired-end"),
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -60,6 +64,7 @@ if (opt$seed < 0) {
                       num_reps = opt$nreps,
                       reads_per_transcript = reads_per_transcript,
                       fold_changes = fold_changes,
+                      paired = opt$singleend,
                       error_rate = opt$error_rate,
                       strand_specific = TRUE)
 
@@ -71,6 +76,7 @@ if (opt$seed < 0) {
                       reads_per_transcript = reads_per_transcript,
                       fold_changes = fold_changes,
                       error_rate = opt$error_rate,
+                      paired = opt$singleend,
                       strand_specific = TRUE,
                       seed = opt$seed)
 }

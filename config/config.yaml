@@ -1,0 +1,15 @@
+# Path to fastq file to inspire simulated data
+read_1: "path/to/read_1.fastq"
+
+# Path to second read in pair if using paired-end fastq as input
+read_2: "path/to/read_2.fastq"
+
+# Path to Salmon indices
+  # Will be created at this directory if not already present
+indices: "indices/"
+
+# Path to annotation file
+annotation: "path/to/annotation.gtf"
+
+# Number of replicates to simulate
+number_of_replicates: 3
