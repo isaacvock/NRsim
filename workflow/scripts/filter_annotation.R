@@ -121,12 +121,14 @@ gtf_filter_i <- gtf %>%
 gtf_filter <- bind_rows(gtf_filter_t, gtf_filter_i) %>%
   filter(type %in% c("transcript", "exon"))
 
-
+print(gtf_filter)
 
 # Export filtered annotation
 final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
                     ranges = IRanges(gtf_filter$start, end = gtf_filter$end),
                     strand = Rle(gtf_filter$strand))
+
+print(final_gr)
 
 mcols(final_gr) <- gtf_filter %>%
   dplyr::select(-seqnames, -start, -end, -strand, -width)
