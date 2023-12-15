@@ -40,27 +40,15 @@ opt <- parse_args(opt_parser) # Load options from command line.
 # Load annotation to map genes to transcripts
 gtf <- as_tibble(rtracklayer::import(opt$gtf))
 
-message("gtf looks like:")
-
-head(gtf)
-
 # Load salmon quantification
 salmon_quant <- fread(opt$quant)
 
-message("salmon_quant looks like:")
-
-head(salmon_quant)
 
 # Filter out low abundance transcripts
 quant_filter <- salmon_quant %>%
   filter(TPM >= opt$tpm | grepl(".I", Name)) %>%
   mutate(transcript_id = Name) %>%
   dplyr::select(-Name)
-
-message("1st quant_filter looks like:")
-
-
-head(quant_filter)
 
 # Map transcripts to gene_ids
 gene_to_tscript <- gtf %>%
@@ -69,19 +57,9 @@ gene_to_tscript <- gtf %>%
   dplyr::select(gene_id, transcript_id, location) %>%
   dplyr::distinct()
 
-message("genes_to_tscript looks like:")
-
-
-head(gene_to_tscript)
-
 quant_filter <- quant_filter %>%
   inner_join(gene_to_tscript,
              by = "transcript_id")
-
-message("3rd to last quant_filter looks like:")
-
-
-head(quant_filter)
 
 # filter out genes with overestimated intronic content
 weird_genes <- quant_filter %>%
@@ -91,26 +69,15 @@ weird_genes <- quant_filter %>%
   dplyr::select(gene_id) %>%
   dplyr::distinct()
 
-message("weird_genes looks like:")
-
-head(weird_genes)
-
 quant_filter <- quant_filter %>%
   filter(!(gene_id %in% weird_genes$gene_id))
 
-message("2nd to last quant_filter looks like:")
-
-
-head(quant_filter)
 
 # Check out intronic content
 intronic <- quant_filter %>%
   filter(grepl(".I", transcript_id)) %>%
   arrange(TPM)
 
-message("intronic looks like:")
-
-head(intronic)
 
 # Add reads mapping to filtered out transcripts to their respective gene transcript
 filtered_out <- salmon_quant %>%
@@ -122,10 +89,6 @@ filtered_out <- salmon_quant %>%
   group_by(gene_id) %>%
   summarise(extra_intronic = sum(NumReads))
 
-message("filtered_out looks like:")
-
-
-head(filtered_out)
 
 quant_filter <- quant_filter %>%
   inner_join(filtered_out,
@@ -133,10 +96,6 @@ quant_filter <- quant_filter %>%
   mutate(NumReads = ifelse(grepl(".I", transcript_id), NumReads + extra_intronic,
                            NumReads))
 
-message("Final quant_filter looks like:")
-
-
-head(quant_filter)
 
 # Create filtered annotation
 transcript_keep <- quant_filter %>%
@@ -163,11 +122,6 @@ gtf_filter <- bind_rows(gtf_filter_t, gtf_filter_i) %>%
   filter(type %in% c("transcript", "exon"))
 
 
-message("GTFs looks like:")
-
-head(gtf_filter_t)
-head(gtf_filter_i)
-head(gtf_filter)
 
 # Export filtered annotation
 final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
@@ -176,6 +130,11 @@ final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
 
 mcols(final_gr) <- gtf_filter %>%
   dplyr::select(-seqnames, -start, -end, -strand, -width)
+
+message("final gr object looks like:")
+
+print(final_gr)
+
 
 rtracklayer::export(final_gr, con = opt$output)
 
