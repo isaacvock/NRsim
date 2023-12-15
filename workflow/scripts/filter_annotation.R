@@ -9,6 +9,7 @@ library(dplyr)
 library(rtracklayer)
 library(GenomicRanges)
 library(optparse)
+library(data.table)
 
 # Process parameters -----------------------------------------------------------
 

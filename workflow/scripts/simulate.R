@@ -9,6 +9,8 @@ library(dplyr)
 library(rtracklayer)
 library(GenomicRanges)
 library(optparse)
+library(readr)
+library(polyester)
 
 # Process parameters -----------------------------------------------------------
 
