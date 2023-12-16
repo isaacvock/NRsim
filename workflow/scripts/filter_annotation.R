@@ -131,12 +131,6 @@ final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
 mcols(final_gr) <- gtf_filter %>%
   dplyr::select(-seqnames, -start, -end, -strand, -width)
 
-message("final gr object looks like:")
-
-print(final_gr)
-
-message("output path is:")
-print(opt$output)
 
 rtracklayer::export(final_gr, con = opt$output)
 
