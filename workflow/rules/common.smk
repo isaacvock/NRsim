@@ -51,7 +51,9 @@ if PE:
 
 else:
 
-    FASTQ_FILES = list(config["read_1"])
+    FASTQ_FILES = [config["read_1"]]
+
+print(FASTQ_FILES)
 
 
 # Check if fastq files are gzipped
