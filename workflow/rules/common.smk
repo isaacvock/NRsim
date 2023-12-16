@@ -53,8 +53,6 @@ else:
 
     FASTQ_FILES = [config["read_1"]]
 
-print(FASTQ_FILES)
-
 
 # Check if fastq files are gzipped
 is_gz = False

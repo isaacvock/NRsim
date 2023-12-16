@@ -90,6 +90,10 @@ weird_genes <- quant_filter %>%
 quant_filter <- quant_filter %>%
   filter(!(gene_id %in% weird_genes$gene_id))
 
+message("quant_filter after weird_genes looks like:")
+
+head(quant_filter)
+
 
 # Check out intronic content
 intronic <- quant_filter %>%
@@ -107,12 +111,20 @@ filtered_out <- salmon_quant %>%
   group_by(gene_id) %>%
   summarise(extra_intronic = sum(NumReads))
 
+message("filtered_out looks like:")
+
+head(filtered_out)
+
 
 quant_filter <- quant_filter %>%
   inner_join(filtered_out,
              by = "gene_id") %>%
   mutate(NumReads = ifelse(grepl(".I", transcript_id), NumReads + extra_intronic,
                            NumReads))
+
+message("quant_filter after filtering looks like:")
+
+head(quant_filter)
 
 
 # Create filtered annotation
