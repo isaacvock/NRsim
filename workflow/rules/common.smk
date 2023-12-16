@@ -28,11 +28,16 @@ def generate_formatted_list(n):
 
 sample_names = generate_formatted_list(config["number_of_replicates"])
 
+if PE:
 
-SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
-                            SID = sample_names,
-                            READS = READS)
+    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
+                                SID = sample_names,
+                                READS = READS)
 
+else:
+
+    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
+                                SID = sample_names)
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
