@@ -45,6 +45,15 @@ gtf <- as_tibble(rtracklayer::import(opt$gtf))
 salmon_quant <- fread(opt$quant)
 
 
+message("gtf looks like:")
+
+head(gtf)
+
+
+message("salmon_quant looks like:")
+
+head(salmon_quant)
+
 # Filter out low abundance transcripts
 quant_filter <- salmon_quant %>%
   filter(TPM >= opt$tpm | grepl(".I", Name)) %>%
@@ -58,9 +67,17 @@ gene_to_tscript <- gtf %>%
   dplyr::select(gene_id, transcript_id, location) %>%
   dplyr::distinct()
 
+message("quant_filter before inner_join looks like:")
+
+head(quant_filter)
+
 quant_filter <- quant_filter %>%
   inner_join(gene_to_tscript,
              by = "transcript_id")
+
+message("quant_filter after inner_join looks like:")
+
+head(quant_filter)
 
 # filter out genes with overestimated intronic content
 weird_genes <- quant_filter %>%
@@ -112,6 +129,13 @@ gene_keep <- quant_filter %>%
   unlist() %>%
   unname()
 
+message("transcript_keep looks like:")
+head(transcript_keep)
+
+message("gene_keep looks like:")
+head(gene_keep)
+
+
 
 gtf_filter_t <- gtf %>%
   filter(transcript_id %in% transcript_keep)
@@ -119,9 +143,17 @@ gtf_filter_t <- gtf %>%
 gtf_filter_i <- gtf %>%
   filter(grepl(".I", transcript_id) & gene_id %in% gene_keep)
 
+message("gtfs look like"):
+head(gtf_filter_t)
+head(gtf_filter_i)
+
 gtf_filter <- bind_rows(gtf_filter_t, gtf_filter_i) %>%
   filter(type %in% c("transcript", "exon"))
 
+
+
+message("gtf_filter looks like:")
+head(gtf_filter)
 
 # Export filtered annotation
 final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
