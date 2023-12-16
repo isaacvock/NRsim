@@ -114,6 +114,7 @@ filtered_out <- salmon_quant %>%
 message("opt$tpm is:")
 print(opt$tpm)
 
+
 message("First part of filtering:")
 salmon_quant %>%
   filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0)
