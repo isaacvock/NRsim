@@ -136,7 +136,8 @@ quant_filter <- quant_filter %>%
   left_join(filtered_out,
              by = "gene_id") %>%
   mutate(extra_intronic = ifelse(is.na(extra_intronic), 0, extra_intronic)) %>%
-  mutate(NumReads = ifelse(grepl(".I", transcript_id), NumReads + extra_intronic,
+  mutate(NumReads = ifelse(grepl(".I", transcript_id),
+                           NumReads + extra_intronic,
                            NumReads))
 
 message("quant_filter after filtering looks like:")
@@ -172,7 +173,7 @@ gtf_filter_t <- gtf %>%
 gtf_filter_i <- gtf %>%
   filter(grepl(".I", transcript_id) & gene_id %in% gene_keep)
 
-message("gtfs look like"):
+message("gtfs look like:")
 head(gtf_filter_t)
 head(gtf_filter_i)
 
