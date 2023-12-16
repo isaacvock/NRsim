@@ -111,6 +111,21 @@ filtered_out <- salmon_quant %>%
   group_by(gene_id) %>%
   summarise(extra_intronic = sum(NumReads))
 
+message("opt$tpm is:")
+print(opt$tpm)
+
+message("First part of filtering:")
+salmon_quant %>%
+  filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0)
+
+message("2nd part of filtering:")
+salmon_quant %>%
+  filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0) %>%
+  mutate(transcript_id = Name) %>%
+  dplyr::select(-Name) %>%
+  inner_join(gene_to_tscript, 
+             by = "transcript_id")
+
 message("filtered_out looks like:")
 
 head(filtered_out)
