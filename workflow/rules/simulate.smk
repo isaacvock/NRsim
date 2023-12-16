@@ -15,7 +15,7 @@ rule filter_annotation:
     shell:
         """
         chmod +x {params.rscript}
-        {params.rscript} -g {input.gtf} -q {input.quantification} 
+        {params.rscript} -g {input.gtf} -q {input.quantification} \
         -c {output.counts} -o {output.filtered} {params.extra} 1> {log} 2>&1
         """
 
