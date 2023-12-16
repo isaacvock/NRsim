@@ -10,6 +10,7 @@ library(rtracklayer)
 library(GenomicRanges)
 library(optparse)
 library(data.table)
+library(readr)
 
 # Process parameters -----------------------------------------------------------
 
