@@ -52,9 +52,15 @@ opt <- parse_args(opt_parser) # Load options from command line.
 # Load read counts
 normalized_reads <- read_csv(opt$counts)
 
+message("normalized_reads looks like:")
+as.data.frame(normalized_reads)
 
 # vector of reads
-reads_per_transcript <- round(normalized_reads$norm_reads * opt$librarysize)
+reads_per_transcript <- ceiling(normalized_reads$norm_reads * opt$librarysize)
+
+message("reads_per_transcript is:")
+reads_per_transcript
+
 
 # Fold changes
 fold_changes <- matrix(1, nrow = nrow(normalized_reads),
