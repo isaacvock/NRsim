@@ -35,7 +35,10 @@ option_list <- list(
   make_option(c("-p", "--singleend"),
               action = "store_false",
               default = TRUE,
-              help = "Simulate single end data rather than paired-end")
+              help = "Simulate single end data rather than paired-end"),
+  make_option(c("-l", "--librarysize", type = "double"),
+              default = 10000000,
+              help = "Total number of reads to simulate")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -51,7 +54,7 @@ normalized_reads <- read_csv(opt$counts)
 
 
 # vector of reads
-reads_per_transcript <- round(normalized_reads$norm_reads * library_size)
+reads_per_transcript <- round(normalized_reads$norm_reads * opt$librarysize)
 
 # Fold changes
 fold_changes <- matrix(1, nrow = nrow(normalized_reads),

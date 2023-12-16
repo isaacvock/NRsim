@@ -33,6 +33,10 @@ read_2: "data/WT1/WT1_test_R2.fastq.gz"
 number_of_replicates: 3
 
 
+# Total number of reads to simulate in each sample
+library_size: 10000
+
+
 # Path to Salmon indices
   # Will be created at this directory if not already present
 indices: "indices/"

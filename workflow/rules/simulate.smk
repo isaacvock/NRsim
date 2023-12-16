@@ -51,11 +51,12 @@ rule simulate_fastas:
     params:
         rscript=workflow.source_path("../scripts/simulate.R"),
         nreps=config["number_of_replicates"],
+        library_size=config["library_size"],
         extra=SIMULATION_PARAMS
     shell:
         """
         chmod +x {params.rscript}
         {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
-        -n {params.nreps} {params.extra} 1> {log} 2>&1
+        -n {params.nreps} -l {params.library_size} {params.extra} 1> {log} 2>&1
         """
 
