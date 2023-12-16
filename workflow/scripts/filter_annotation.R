@@ -202,6 +202,6 @@ rtracklayer::export(final_gr, con = opt$output)
 
 normalized_reads <- quant_filter %>%
   ungroup() %>%
-  mutate(norm_reads = NumReads/sum(NumReads))
+  mutate(norm_reads = (NumReads + 1)/sum(NumReads + 1))
 
 write_csv(normalized_reads, file = opt$counts)
