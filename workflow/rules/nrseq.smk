@@ -2,9 +2,9 @@ if PE:
 
     rule split_fasta:
         input:
-            fasta="results/simulate_fastas/sample_{sample}_{read}.fasta",
+            fasta="results/simulate_fastas/sample_{{sample}}_{{read}}.fasta",
         output:
-            temp(expand("results/simulate_fastas/sample_{sample}_{read}.{ID}.fasta", ID = SPLIT_IDS)),
+            temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
         log:
             "logs/split_fasta/sample_{sample}_read_{read}.log"
         params:
@@ -19,7 +19,7 @@ if PE:
 
     rule convert_to_fastq:
         input:
-            fasta=expand("results/simulate_fastas/sample_{sample}_{read}.{ID}.fasta", ID = SPLIT_IDS),
+            fasta=expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
         output:
             fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz"
         log:
@@ -44,7 +44,7 @@ else:
         input:
             fasta="results/simulate_fastas/sample_{sample}.fasta",
         output:
-            temp(expand("results/simulate_fastas/sample_{sample}.{ID}.fasta", ID = SPLIT_IDS)),
+            temp(expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
         log:
             "logs/split_fasta/sample_{sample}.log"
         params:
@@ -59,7 +59,7 @@ else:
 
     rule convert_to_fastq:
         input:
-            fasta=expand("results/simulate_fastas/sample_{sample}.{ID}.fasta", ID = SPLIT_IDS),
+            fasta=expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
         output:
             fastq="results/convert_to_fastq/sample_{sample}.fastq.gz"
         log:
