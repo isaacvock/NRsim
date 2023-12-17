@@ -33,7 +33,7 @@ include: "rules/common.smk"
 include: "rules/preprocess.smk"
 include: "rules/quantify.smk"
 include: "rules/simulate.smk"
-#include: "rules/nrseq.smk"
+include: "rules/nrseq.smk"
 
 
 ##### target rules #####

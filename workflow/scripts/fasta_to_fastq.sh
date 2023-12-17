@@ -3,10 +3,10 @@
 # Source the paths and variables:
 cpus=$1
 sample=$2
-read=$3
-qscore=$4
-pyscript=$5
-output=$6
+qscore=$3
+pyscript=$4
+output=$5
+read=$6
 
 
 

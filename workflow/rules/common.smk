@@ -1,5 +1,6 @@
 import glob
 import os
+import math
 
 
 ### Simulation output
@@ -111,4 +112,24 @@ def get_target_output():
 
         target.append(expand("results/fastqc/read{read}.html", read = READ_NAMES))
 
+    if PE:
+
+        target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READ_NAMES))
+
+    else:
+
+        target.append(expand("results/convert_to_fastq/sample_{sample}.fastq.gz", sample = sample_names))
+
     return target
+
+
+### FASTA file splitting
+
+# Number of temporary fasta files to make
+NUMBER_SPLIT = math.ceil(config["library_size"]/32)
+
+# Number of digits in number of temp files; for inferring file name
+num_digits = len(str(NUMBER_SPLIT))
+
+# IDS in split FASTA file sample names
+SPLIT_IDS = [str(i).zfill(num_digits) for i in range(0, NUMBER_SPLIT)]
