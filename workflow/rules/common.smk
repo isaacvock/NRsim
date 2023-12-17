@@ -110,11 +110,11 @@ def get_target_output():
 
     if config["run_fastqc"]:
 
-        target.append(expand("results/fastqc/read{read}.html", read = READ_NAMES))
+        target.append(expand("results/fastqc/read{read}.html", read = READS))
 
     if PE:
 
-        target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READ_NAMES))
+        target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READS))
 
     else:
 
