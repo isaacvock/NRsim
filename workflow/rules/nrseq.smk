@@ -26,7 +26,7 @@ if PE:
             "logs/convert_to_fastq/sample_{sample}_{read}.log"
         params:
             qscore=config["qscore_impute"],
-            shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh")
+            shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
             pythonscript=workflow.source_path("../scripts/fastq_to_fastq.py")
         conda:
             "../envs/fastq.yaml"
@@ -66,7 +66,7 @@ else:
             "logs/convert_to_fastq/sample_{sample}.log"
         params:
             qscore=config["qscore_impute"],
-            shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh")
+            shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
             pythonscript=workflow.source_path("../scripts/fastq_to_fastq.py")
         conda:
             "../envs/fastq.yaml"
