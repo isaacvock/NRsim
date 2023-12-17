@@ -37,6 +37,9 @@ number_of_replicates: 3
 library_size: 10000
 
 
+# q-score ASCII value to imput
+qscore_impute: "I"
+
 # Path to Salmon indices
   # Will be created at this directory if not already present
 indices: "indices/"
