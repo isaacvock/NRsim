@@ -1,6 +1,25 @@
 from Bio import SeqIO
 import sys
+import argparse
 
+# Parse commandline arguments
+parser = argparse.ArgumentParser(description='This is a script to convert a fasta file to a fastq file')
+requiredNamed = parser.add_argument_group('required named arguments')
+requiredNamed.add_argument('-f', '--fasta', type=str, required=True, metavar = 'in_file.fasta',
+                    help='FASTA file to process')
+parser.add_argument('--qscore', default='I', type=str,
+                    help='qscore ASCII value to impute')
+
+args = parser.parse_args()
+
+# name without .fasta suffix
+inputName = args.fasta.split('.fasta')[0] 
+
+# fastq file path
+fastq = inputName + '.fastq'
+
+
+# Function that will process fasta file and produce fastq file
 def convert_fasta_to_fastq(fasta_file, q_char, fastq_file):
     try:
         q_score = ord(q_char)  # Convert ASCII character to its ASCII value
@@ -13,14 +32,11 @@ def convert_fasta_to_fastq(fasta_file, q_char, fastq_file):
                 fq.write(str(record.seq) + "\n")
                 fq.write("+\n")
                 fq.write(q_char * len(record.seq) + "\n")
+
         print(f"FASTQ file generated: {fastq_file}")
 
     except Exception as e:
         print(f"Error: {e}")
 
-# User input for the file names and Q-score character
-fasta_file = input("Enter the path to the FASTA file: ")
-q_char = input("Enter the ASCII character for the Q-score: ")
-fastq_file = input("Enter the path for the output FASTQ file: ")
-
-convert_fasta_to_fastq(fasta_file, q_char, fastq_file)
+# Convert fasta to fastq
+convert_fasta_to_fastq(args.fasta, args.qscore, fastq)

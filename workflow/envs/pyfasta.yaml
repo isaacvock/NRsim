@@ -1,0 +1,8 @@
+channels:
+  - anaconda
+  - conda-forge
+  - bioconda
+dependencies:
+  - pyfasta
+  - python <=3.9.18
+  - gawk
