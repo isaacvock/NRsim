@@ -27,7 +27,7 @@ if PE:
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fastq_to_fastq.py")
+            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py")
         conda:
             "../envs/fastq.yaml"
         threads: 32
@@ -67,7 +67,7 @@ else:
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fastq_to_fastq.py")
+            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py")
         conda:
             "../envs/fastq.yaml"
         threads: 32
