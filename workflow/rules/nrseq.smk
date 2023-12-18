@@ -2,7 +2,7 @@ if PE:
 
     rule split_fasta:
         input:
-            fasta="results/simulate_fastas/sample_{{sample}}_{{read}}.fasta",
+            fasta="results/simulate_fastas/sample_{sample}_{read}.fasta",
         output:
             temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
         log:
