@@ -47,9 +47,9 @@ normalized_reads <- fread(opt$counts)
 
 genes <- unique(normalized_reads$gene_id)
 
-kdeg_diff <- rbinom(ngenes, size = 1, prob = pkdeg_diff)
-
 ngenes <- length(genes)
+
+kdeg_diff <- rbinom(ngenes, size = 1, prob = pkdeg_diff)
 
 fn_gene <- inv_logit(rnorm(ngenes, 0, 1))
 
