@@ -1,6 +1,25 @@
 import pandas as pd
 import random
 from Bio import SeqIO
+import argparse
+
+# Parse commandline arguments
+parser = argparse.ArgumentParser(description='This is a script to convert a fasta file to a fastq file')
+requiredNamed = parser.add_argument_group('required named arguments')
+requiredNamed.add_argument('-f', '--fastq', type=str, required=True, metavar = 'in_file.fastq',
+                    help='FASTQ file to introduce mutations in')
+requiredNamed.add_argument('-k', '--kinetics', type=str, required=True, metavar = 'kinetics.csv',
+                    help='csv file with kinetic parameters for each transcript to derive fraction new from')
+
+
+args = parser.parse_args()
+
+# name without .fasta suffix
+inputName = args.fasta.split('.fastq')[0] 
+
+# Output name
+outputName = inputName + '.nrseq.fastq'
+
 
 def modify_nucleotides(sequence):
     """ Modify nucleotides in the sequence based on the given probability. """
@@ -33,5 +52,5 @@ def process_fastq(csv_file, fastq_file, output_fastq):
             # Write the record to the output file
             SeqIO.write(record, output_handle, "fastq")
 
-# Example usage
-process_fastq("transcripts.csv", "reads.fastq", "modified_reads.fastq")
+# Make NR-seq fastqs
+process_fastq(args.kinetics, args.fastq, outputName)

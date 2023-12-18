@@ -1,3 +1,23 @@
+rule generate_transcript_kinetics:
+    input:
+        counts="results/filter_annotation/transcript_read_counts.csv",
+    output:
+        kinetics="results/generate_transcript_kinetics/kinetics.csv"
+    log:
+        "logs/generate_transcript_kinetics/generate_transcript_kinetics.log"
+    conda:
+        "../envs/simulate.smk"
+    params:
+        rscript=workflow.source_path("../scripts/filter_annotation.R"),
+        extra=config["generate_transcript_kinetics_params"]
+    threads: 1
+    shell:
+        """
+        chmod +x {params.rscript}
+        {params.rscript} -c {input.counts} -o {output.kinetics} {params.extra} 1> {log} 2>&1
+        """
+
+
 if PE:
 
     rule split_fasta:
@@ -19,22 +39,25 @@ if PE:
 
     rule convert_to_fastq:
         input:
+            kinetics="results/generate_transcript_kinetics/kinetics.csv",
             fasta=expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
         output:
-            fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz"
+            fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz",
         log:
             "logs/convert_to_fastq/sample_{sample}_{read}.log"
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py")
+            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py"),
+            pythonscript2=workflow.source_path("../scripts/make_nrseq_fastq.py"),
+            PE = PE
         conda:
             "../envs/fastq.yaml"
         threads: 32
         shell:
             """
             chmod +x {params.shellscript}
-            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {output.fastq} {wildcards.read} 1> {log} 2>&1
+            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {params.pythonscript2} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
             """
 
 
@@ -59,6 +82,7 @@ else:
 
     rule convert_to_fastq:
         input:
+            kinetics="results/generate_transcript_kinetics/kinetics.csv",
             fasta=expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
         output:
             fastq="results/convert_to_fastq/sample_{sample}.fastq.gz"
@@ -67,18 +91,19 @@ else:
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py")
+            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py"),
+            pythonscript2=workflow.source_path("../scripts/make_nrseq_fastq.py"),
+            PE = PE
         conda:
             "../envs/fastq.yaml"
         threads: 32
         shell:
             """
             chmod +x {params.shellscript}
-            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {output.fastq} DUMMY 1> {log} 2>&1
+            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {params.pythonscript2} {input.kinetics} {output.fastq} {params.PE} DUMMY 1> {log} 2>&1
             """
 
 
-#rule generate_transcript_kinetics:
 
 
 #rule make_nrseq_fastq:

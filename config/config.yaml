@@ -88,6 +88,8 @@ simulation_gffread_extra: ""
 # Extra parameters for simulation with polyester
 simulate_fastas_params: ""
 
+# Extra parameters for kinetics generation
+generate_transcript_kinetics_params: ""
 
 
 ##### OTHER FASTP PARAMETERS #####
