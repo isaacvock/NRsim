@@ -8,7 +8,7 @@ rule generate_transcript_kinetics:
     conda:
         "../envs/simulate.yaml"
     params:
-        rscript=workflow.source_path("../scripts/filter_annotation.R"),
+        rscript=workflow.source_path("../scripts/generate_transcript_kinetics.R"),
         extra=config["generate_transcript_kinetics_params"]
     threads: 1
     shell:
