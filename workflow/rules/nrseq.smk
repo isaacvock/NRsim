@@ -6,7 +6,7 @@ rule generate_transcript_kinetics:
     log:
         "logs/generate_transcript_kinetics/generate_transcript_kinetics.log"
     conda:
-        "../envs/simulate.smk"
+        "../envs/simulate.yaml"
     params:
         rscript=workflow.source_path("../scripts/filter_annotation.R"),
         extra=config["generate_transcript_kinetics_params"]
