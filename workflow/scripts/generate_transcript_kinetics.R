@@ -21,8 +21,6 @@ option_list <- list(
               help = "Path to RNA-seq read counts for simulation"),
   make_option(c("-o", "--output", type = "character"),
               help = "Path to modified annotation output"),
-  make_option(c("-o", "--output", type = "character"),
-              help = "Path to modified annotation output"),
   make_option(c("-t", "--labeltime", type = "numeric"),
               default = 2,
               help = "Path to modified annotation output"),
