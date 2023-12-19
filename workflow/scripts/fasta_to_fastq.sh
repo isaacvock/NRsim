@@ -10,6 +10,9 @@ kinetics=$6
 output=$7
 PE=$8
 
+# Exit immediately if any command returns a non-zero status
+set -e
+
 
 if [ "$PE" = "True" ]; then
 
