@@ -1,8 +1,8 @@
 ####### GENERAL INFORMATION ABOUT THIS CONFIG #######
 #
 # This config file allows you to specify a number of important pieces of information that
-# the THE_Aligner pipeline will require to run. It also allows you to set optional parameters
-# for all tools that THE_Aligner makes use of.
+# the NRsim pipeline will require to run. It also allows you to set optional parameters
+# for all tools that NRsim makes use of.
 #
 # File paths can either be absolute (e.g., ~/path/to/file/or/directory) or relative
 # to the directory in which you are calling the pipeline from (e.g., data/fastq/WT_1 in the 
@@ -11,6 +11,7 @@
 #
 ####### PARAMETERS YOU NEED TO SET #######
 
+### Files to create annotation and read counts for simulation
 
 # Path to annotation file
 annotation: "path/to/annotation.gtf"
@@ -29,6 +30,9 @@ read_1: "path/to/read_1.fastq"
 read_2: ""
 
 
+
+### Key simulation details
+
 # Number of replicates to simulate
 number_of_replicates: 3
 
@@ -40,6 +44,9 @@ library_size: 10000000
 # q-score ASCII value to imput
 qscore_impute: "I"
 
+
+
+### Salmon parameters to get transcript abundances for simulation
 
 # Path to Salmon indices
   # Will be created at this directory if not already present
