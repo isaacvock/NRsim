@@ -15,7 +15,7 @@ requiredNamed.add_argument('-k', '--kinetics', type=str, required=True, metavar 
 args = parser.parse_args()
 
 # name without .fasta suffix
-inputName = args.fasta.split('.fastq')[0] 
+inputName = args.fastq.split('.fastq')[0] 
 
 # Output name
 outputName = inputName + '.nrseq.fastq'
