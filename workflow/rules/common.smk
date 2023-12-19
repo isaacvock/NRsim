@@ -126,7 +126,9 @@ def get_target_output():
 ### FASTA file splitting
 
 # Number of temporary fasta files to make
-NUMBER_SPLIT = math.ceil(config["library_size"]/32)
+    # Hardcoding for now to maximum amount of threads allowed by rule
+    # Could get fancier or allow more user specification here, but this is probably sufficient
+NUMBER_SPLIT = 32
 
 # Number of digits in number of temp files; for inferring file name
 num_digits = len(str(NUMBER_SPLIT))
