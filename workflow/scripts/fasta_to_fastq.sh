@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Parse args"
+
 # Source the paths and variables:
 cpus=$1
 sample=$2
@@ -10,6 +12,8 @@ kinetics=$6
 output=$7
 PE=$8
 
+echo "Set safety mode"
+
 # Exit immediately if any command returns a non-zero status
 set -e
 
@@ -18,9 +22,9 @@ if [ "$PE" = "True" ]; then
 
     read=$9
 
-    # parallel -j $cpus "python $pyscript -f {1} \
-    #                                             --qscore $qscore" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
-    parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_\"$sample\"_\"$read\".{#}.fastq" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
+    echo "About to run seqtk"
+
+    parallel -j $cpus "seqtk seq -F 'I' {1} > ./results/split_fasta/sample_"$sample"_"$read".{#}.fastq" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
 
     echo "converted fasta to fastq"
 
@@ -36,9 +40,16 @@ if [ "$PE" = "True" ]; then
 
 else
 
-    # parallel -j $cpus "python $pyscript -f {1} \
-    #                                             --qscore $qscore" ::: ./results/split_fasta/sample_"$sample".*.fasta
-    parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_$sample.{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
+    echo "About to run seqtk"
+
+    count=0
+    for file in ./results/split_fasta/sample_"$sample".*.fasta
+    do
+        seqtk seq -F 'I' $file > ./results/split_fasta/sample"$sample"."$count".fastq
+        (( count++ ))
+    done
+
+    #parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_"$sample".{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
 
     echo "converted fasta to fastq"
 
