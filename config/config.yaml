@@ -9,6 +9,9 @@
 # example samples entry means to look in the data directory present in the directory
 # where you called `snakemake` to run the pipeline).
 #
+# Paths to files and directories are wrapped in double quotes in this example config, though
+# this is technically not necessary, as Snakemake typically knows to interpret them as strings
+# whether or not the double quotes are present.
 ####### PARAMETERS YOU NEED TO SET #######
 
 ### Files to create annotation and read counts for simulation
@@ -18,7 +21,7 @@ annotation: "path/to/annotation.gtf"
 
 
 # Path to genome fasta file
-genome: data/genome/genome.fasta 
+genome: "data/genome/genome.fasta"
 
 
 # Path to fastq file to inspire simulated data
