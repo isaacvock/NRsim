@@ -38,7 +38,7 @@ else
 
     # parallel -j $cpus "python $pyscript -f {1} \
     #                                             --qscore $qscore" ::: ./results/split_fasta/sample_"$sample".*.fasta
-    parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_\"$sample\".{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
+    parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_$sample.{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
 
     echo "converted fasta to fastq"
 
