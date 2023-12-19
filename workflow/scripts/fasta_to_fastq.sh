@@ -45,7 +45,7 @@ if [ "$PE" = "True" ]; then
 else
 
     # Use seqtk to convert fasta to fastq
-    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample"_"$read".*.fasta
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample".*.fasta
 
 
 
