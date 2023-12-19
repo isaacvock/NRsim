@@ -1,22 +1,27 @@
-def generate_formatted_list(n):
-    formatted_list = ["{:02d}".format(i) for i in range(1, n + 1)]
-    return formatted_list
+from Bio import SeqIO
+from Bio.Seq import Seq
+import argparse
+import os
+import random
 
-sample_names = generate_formatted_list(3)
+def modify_nucleotides(sequence):
+    """ Modify nucleotides in the sequence based on the given probability. """
+    modified_sequence = ""
+    for nucleotide in sequence:
+        if nucleotide == 'T':
+            modified_sequence += 'C' if random.random() < 0.05 else 'T'
+        else:
+            modified_sequence += nucleotide
+    return modified_sequence
 
-if "":
-
-    print("bad")
-
-else:
-
-    print("good!")
 
 
-if "1":
+with open("sandbox_nrseq.fastq", "w") as output_handle:
 
-    print("good!")
+    for record in SeqIO.parse("sandbox.fastq", "fastq"):
+        newness = random.random() < 0.5
+        if newness:
+                record.seq = Seq(modify_nucleotides(str(record.seq)))
+        
+        SeqIO.write(record, output_handle, "fastq")
 
-else:
-
-    print("bad")

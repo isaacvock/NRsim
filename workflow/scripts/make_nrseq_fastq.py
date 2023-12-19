@@ -2,6 +2,7 @@ import pandas as pd
 import random
 from Bio import SeqIO
 import argparse
+from Bio.Seq import Seq
 
 # Parse commandline arguments
 parser = argparse.ArgumentParser(description='This is a script to convert a fasta file to a fastq file')
@@ -47,10 +48,10 @@ def process_fastq(csv_file, fastq_file, output_fastq):
                 newness = random.random() < transcript_to_fn[transcript_id]
                 if newness:
                     # Modify the sequence
-                    record.seq = modify_nucleotides(str(record.seq))
+                    record.seq = Seq(modify_nucleotides(str(record.seq)))
 
             # Write the record to the output file
             SeqIO.write(record, output_handle, "fastq")
 
 # Make NR-seq fastqs
-process_fastq(args.kinetics, args.fastq, outputName)
+process_fastq(args.kinetics, args.fastq, str(outputName))
