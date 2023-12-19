@@ -22,47 +22,47 @@ if [ "$PE" = "True" ]; then
 
     read=$9
 
-    echo "About to run seqtk"
-
-    parallel -j $cpus "seqtk seq -F 'I' {1} > ./results/split_fasta/sample_"$sample"_"$read".{#}.fastq" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
-
-    echo "converted fasta to fastq"
+    # Use seqtk to convert fasta file to fastq
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample"_"$read".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample"_"$read".*.fasta
 
 
+
+    # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript2 -f {1} \
-                                                -k $kinetics" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
 
-    echo "Introduced NR-induced mutations in fastq files"
+    # Clean up temp files
+    rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
 
+
+    # Combine NR-seq fragment fastqs and gzip
     cat ./results/split_fasta/sample_"$sample"_"$read".*.nrseq.fastq | pigz -p $cpus > "$output" 
 
-    echo "Concatenated fastq file"
+    # Clean up temp files
+    rm -f ./results/split_fasta/sample_"$sample"_"$read".*.nrseq.fastq
+
 
 else
 
-    echo "About to run seqtk"
-
-    count=0
-    for file in ./results/split_fasta/sample_"$sample".*.fasta
-    do
-        seqtk seq -F 'I' $file > ./results/split_fasta/sample"$sample"."$count".fastq
-        (( count++ ))
-    done
-
-    #parallel -j $cpus "seqtk seq -F '#' {1} > ./results/split_fasta/sample_"$sample".{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
-
-    echo "converted fasta to fastq"
+    # Use seqtk to convert fasta to fastq
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample"_"$read".*.fasta
 
 
+
+    # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript2 -f {1} \
-                                                -k $kinetics" ::: ./results/split_fasta/sample_"$sample".*.fastq
-
-    echo "Introduced NR-induced mutations in fastq files"
+                                                -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample".*.fastq
 
 
-    cat ./results/split_fasta/sample_"$sample".*.nrseq.fastq | pigz -p $cpus > "$output" 
+    # Clean up temp files
+    rm -f ./results/convert_to_fastq/sample_"$sample".*.fastq
 
-    echo "Concatenated fastq file"
+    # Combine NR-seq fragment fastqs and gzip
+    cat ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq | pigz -p $cpus > "$output" 
+
+    # Clean up temp files
+    rm -f ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq
+
 
 
 fi
