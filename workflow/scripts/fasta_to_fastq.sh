@@ -18,8 +18,11 @@ if [ "$PE" = "True" ]; then
 
     read=$9
 
-    parallel -j $cpus "python $pyscript -f {1} \
-                                                --qscore $qscore" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
+    # parallel -j $cpus "python $pyscript -f {1} \
+    #                                             --qscore $qscore" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
+    parallel -j $cpus "seqtk seq -F '\"$qscore\"' \
+                        {1} > ./results/split_fasta/sample_\"$sample\"_\"$read\".{#}.fastq" ::: ./results/split_fasta/sample_"$sample"_"$read".*.fasta
+
 
 
     parallel -j $cpus "python $pyscript2 -f {1} \
@@ -31,15 +34,19 @@ if [ "$PE" = "True" ]; then
 
 else
 
-    parallel -j $cpus "python $pyscript -f {1} \
-                                                --qscore $qscore" ::: ./results/split_fasta/sample_"$sample".*.fasta
+    # parallel -j $cpus "python $pyscript -f {1} \
+    #                                             --qscore $qscore" ::: ./results/split_fasta/sample_"$sample".*.fasta
+    parallel -j $cpus "seqtk seq -F '\"$qscore\"' \
+                        {1} > ./results/split_fasta/sample_\"$sample\".{#}.fastq" ::: ./results/split_fasta/sample_"$sample".*.fasta
+
+
 
 
     parallel -j $cpus "python $pyscript2 -f {1} \
                                                 -k $kinetics" ::: ./results/split_fasta/sample_"$sample".*.fastq
 
 
-    cat ./results/split_fasta/sample_"$sample"_"$read".*.nrseq.fastq | pigz -p $cpus > "$output" 
+    cat ./results/split_fasta/sample_"$sample".*.nrseq.fastq | pigz -p $cpus > "$output" 
 
 
 fi
