@@ -48,8 +48,7 @@ if PE:
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py"),
-            pythonscript2=workflow.source_path("../scripts/make_nrseq_fastq.py"),
+            pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
             PE = PE
         conda:
             "../envs/fastq.yaml"
@@ -57,7 +56,7 @@ if PE:
         shell:
             """
             chmod +x {params.shellscript}
-            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {params.pythonscript2} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
+            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
             """
 
 
@@ -91,8 +90,7 @@ else:
         params:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
-            pythonscript=workflow.source_path("../scripts/fasta_to_fastq.py"),
-            pythonscript2=workflow.source_path("../scripts/make_nrseq_fastq.py"),
+            pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
             PE = PE
         conda:
             "../envs/fastq.yaml"
@@ -100,7 +98,7 @@ else:
         shell:
             """
             chmod +x {params.shellscript}
-            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {params.pythonscript2} {input.kinetics} {output.fastq} {params.PE} DUMMY 1> {log} 2>&1
+            {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} DUMMY 1> {log} 2>&1
             """
 
 
