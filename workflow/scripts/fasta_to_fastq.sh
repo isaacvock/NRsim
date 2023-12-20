@@ -30,12 +30,9 @@ if [ "$PE" = "True" ]; then
     parallel -j $cpus "python $pyscript -f {1} \
                                                 -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
 
-    ## Clean up temp files
-    #rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
-
 
     # Combine NR-seq fragment fastqs and gzip
-    cat ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq | pigz -p $cpus > "$output" 
+    cat ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
 
     ## Clean up temp files
     #rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq
@@ -53,14 +50,11 @@ else
                                                 -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample".*.fastq
 
 
+    # Combine NR-seq fragment fastqs and gzip
+    cat ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
+
     # Clean up temp files
     rm -f ./results/convert_to_fastq/sample_"$sample".*.fastq
-
-    # Combine NR-seq fragment fastqs and gzip
-    cat ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq | pigz -p $cpus > "$output" 
-
-    # Clean up temp files
-    rm -f ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq
 
 
 
