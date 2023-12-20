@@ -40,7 +40,7 @@ if PE:
     rule convert_to_fastq:
         input:
             kinetics="results/generate_transcript_kinetics/kinetics.csv",
-            fasta=expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
+            fasta=temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
         output:
             fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz",
         log:
@@ -66,7 +66,7 @@ else:
         input:
             fasta="results/simulate_fastas/sample_{sample}.fasta",
         output:
-            expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
+            temp(expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
         log:
             "logs/split_fasta/sample_{sample}.log"
         params:

@@ -35,7 +35,7 @@ if [ "$PE" = "True" ]; then
     cat ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
 
     ## Clean up temp files
-    #rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq
+    rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
 
 
 else
