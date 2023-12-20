@@ -24,7 +24,7 @@ if PE:
         input:
             fasta="results/simulate_fastas/sample_{sample}_{read}.fasta",
         output:
-            temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
+            expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
         log:
             "logs/split_fasta/sample_{sample}_read_{read}.log"
         params:
@@ -66,7 +66,7 @@ else:
         input:
             fasta="results/simulate_fastas/sample_{sample}.fasta",
         output:
-            temp(expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
+            expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
         log:
             "logs/split_fasta/sample_{sample}.log"
         params:
