@@ -35,10 +35,10 @@ if [ "$PE" = "True" ]; then
 
 
     # Combine NR-seq fragment fastqs and gzip
-    cat ./results/split_fasta/sample_"$sample"_"$read".*.nrseq.fastq | pigz -p $cpus > "$output" 
+    cat ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq | pigz -p $cpus > "$output" 
 
     # Clean up temp files
-    rm -f ./results/split_fasta/sample_"$sample"_"$read".*.nrseq.fastq
+    rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq
 
 
 else
