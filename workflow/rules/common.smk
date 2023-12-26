@@ -133,19 +133,14 @@ def get_target_output():
 
     if config["simulation_parameters"]:
 
-        for s in SIM_NAMES:
 
-            if config["simulation_parameters"]["pe"][s]:
+        if PE:
 
-                target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz", sim = s, 
-                                                                                                    sample = generate_formatted_list(config["simulation_parameters"]["number_of_replicates"][s]), 
-                                                                                                    read = ['1', '2']))
+            target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz", sim = SIM_NAMES, sample = sample_names, read = READS))
 
-            else:
+        else:
 
-                target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz", sim = s, 
-                                                                                                    sample = generate_formatted_list(config["simulation_parameters"]["number_of_replicates"][s])))
-
+            target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz", sim = SIM_NAMES, sample = sample_names))
 
     else:
 
