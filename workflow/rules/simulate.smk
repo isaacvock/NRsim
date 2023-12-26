@@ -56,7 +56,7 @@ if config["simulation_parameters"]:
                 "../envs/simulate.yaml"
             params:
                 rscript=workflow.source_path("../scripts/simulate.R"),
-                nreps= lambda wildcards: config["simulation_parameters"]["number_of_replicates"][str(wildcards.sim)],
+                nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
             shell:
@@ -82,7 +82,7 @@ if config["simulation_parameters"]:
                 "../envs/simulate.yaml"
             params:
                 rscript=workflow.source_path("../scripts/simulate.R"),
-                nreps= lambda wildcards: config["simulation_parameters"]["number_of_replicates"][str(wildcards.sim)],
+                nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
                 pe= "--singleend",
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
