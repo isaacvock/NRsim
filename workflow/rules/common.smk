@@ -7,7 +7,7 @@ import math
 
 if config["simulation_parameters"]:
 
-    SIM_NAMES = list(config['simulation_parameters']['number_of_replicates'].keys())
+    SIM_NAMES = list(config['simulation_parameters']['library_size'].keys())
 
 
 if config["read_2"]:
