@@ -32,7 +32,7 @@ read_2: "data/WT1/WT1_test_R2.fastq.gz"
 PE: True
 
 # Number of replicates to simulate
-number_of_replicates: 3
+number_of_replicates: 2
 
 
 # Total number of reads to simulate in each sample
@@ -47,18 +47,12 @@ qscore_impute: "I"
 # with different simulation parameters. Give each dataset a keyword name
 # (e.g., sim1) and provide a value for each parameter value for each dataset.
 simulation_parameters: 
-  number_of_replicates:
-    sim_1: 2
-    sim_2: 1
   library_size:
     sim_1: 5000
     sim_2: 10000
-  qscore_imput:
+  qscore_impute:
     sim_1: "I"
     sim_2: "I"
-  pe:
-    sim_1: True
-    sim_2: False
   extra_params:
     sim_1: ""
     sim_2: ""

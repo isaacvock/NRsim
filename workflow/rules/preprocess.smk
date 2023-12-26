@@ -6,7 +6,7 @@ if is_gz:
         input:
             fastqs=FASTQ_FILES,
         output:
-            unzipped_fqs=temp(expand("results/unzipped/read_{read}.fastq", read = READS)),
+            unzipped_fqs=temp(expand("results/unzipped/read_{read}.fastq", read = READS_input)),
         log:
             "logs/unzip/unzip.log"
         conda:
@@ -24,7 +24,7 @@ if PE_input:
         # Trim with fastp (automatically detects adapters)
         rule fastp:
             input:
-                sample=expand("results/unzipped/read_{read}.fastq", read = READS),
+                sample=expand("results/unzipped/read_{read}.fastq", read = READS_input),
             output:
                 trimmed=["results/trimmed/read.1.fastq", "results/trimmed/read.2.fastq"],
                 # Unpaired reads separately
@@ -74,7 +74,7 @@ else:
         # Trim with fastp (automatically detects adapters)
         rule fastp:
             input:
-                sample=expand("results/unzipped/read_{read}.fastq", read = READS),
+                sample=expand("results/unzipped/read_{read}.fastq", read = READS_input),
             output:
                 trimmed="results/trimmed/read.1.fastq",
                 failed="results/trimmed/read.1.failed.fastq",

@@ -12,7 +12,7 @@ if config["simulation_parameters"]:
 
 if config["read_2"]:
 
-    READS = ['1', '2']
+    READS_input = ['1', '2']
 
     PE_input = True
   
@@ -21,7 +21,7 @@ if config["read_2"]:
 
 else:
 
-    READS = ['1']
+    READS_input = ['1']
 
     PE_input = False
 
@@ -29,6 +29,14 @@ else:
 
 
 PE = config["PE"]
+
+if PE:
+
+    READS = ['1', '2']
+
+else:
+
+    READS = ['1']
 
 
 def generate_formatted_list(n):
@@ -38,40 +46,17 @@ def generate_formatted_list(n):
 
 sample_names = generate_formatted_list(config["number_of_replicates"])
 
-if config["simulation_parameters"]:
 
-    def get_simulation_output(wildcards):
+if PE:
 
-        if config["simulation_parameters"]["pe"][str(wildcards.sim)]:
-
-            READS_SIM = ['1', '2']
-
-
-            SIMULATION_DATASET = expand("results/simulate_fastas/{SIM}/sample_{SID}_{READS}.fasta", 
-                                        SIM = wildcards.sim,
-                                        SID = sample_names,
-                                        READS = READS_SIM)
-
-        else:
-
-            SIMULATION_DATASET = expand("results/simulate_fastas/{SIM}/sample_{SID}.fasta", 
-                                        SIM = wildcards.sim,
-                                        SID = sample_names)
-
-        return SIMULATION_DATASET
+    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
+                                SID = sample_names,
+                                READS = READS)
 
 else:
 
-    if PE:
-
-        SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
-                                    SID = sample_names,
-                                    READS = READS)
-
-    else:
-
-        SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
-                                    SID = sample_names)
+    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
+                                SID = sample_names)
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
