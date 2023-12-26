@@ -81,7 +81,7 @@ else:
             nreps=config["number_of_replicates"],
             library_size=config["library_size"],
             pe= lambda wildcards: "" if config["PE"] else "--singleend",
-            extra=SIMULATION_PARAMS
+            extra=config["simulate_fastas_params"]
         shell:
             """
             chmod +x {params.rscript}

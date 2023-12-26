@@ -5,7 +5,7 @@ import math
 
 ### Simulation output
 
-SIM_NAMES = list(config['simulation_params']['number_of_replicates'].keys())
+SIM_NAMES = list(config['simulation_parameters']['number_of_replicates'].keys())
 
 
 if config["read_2"]:
@@ -23,7 +23,7 @@ else:
 
     PE_input = False
 
-    SIMULATION_PARAMS = config["simulate_fastas_params"] + " --singleend"
+    SIMULATION_PARAMS = config["simulate_fastas_params"]
 
 
 PE = config["PE"]
