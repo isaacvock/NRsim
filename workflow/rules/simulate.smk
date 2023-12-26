@@ -36,27 +36,56 @@ rule make_simulation_transcriptome:
         "../scripts/gffread.py"
 
 
+if config["simulation_parameters"]:
 
-rule simulate_fastas:
-    input:
-        fasta="results/make_simulation_transcriptome/transcriptome_sim.fasta",
-        counts="results/filter_annotation/transcript_read_counts.csv",
-    output:
-        sim=SIMULATION_OUTPUT
-    threads: 1
-    log:
-        "logs/simulate_fastas/simulate_fastas.log"
-    conda:
-        "../envs/simulate.yaml"
-    params:
-        rscript=workflow.source_path("../scripts/simulate.R"),
-        nreps=config["number_of_replicates"],
-        library_size=config["library_size"],
-        extra=SIMULATION_PARAMS
-    shell:
-        """
-        chmod +x {params.rscript}
-        {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
-        -n {params.nreps} -l {params.library_size} {params.extra} 1> {log} 2>&1
-        """
+    rule simulate_fastas:
+        input:
+            fasta="results/make_simulation_transcriptome/transcriptome_sim.fasta",
+            counts="results/filter_annotation/transcript_read_counts.csv",
+        output:
+            sim=get_simulation_output,
+        threads: 1
+        log:
+            "logs/simulate_fastas/{sim}/simulate_fastas.log"
+        conda:
+            "../envs/simulate.yaml"
+        params:
+            rscript=workflow.source_path("../scripts/simulate.R"),
+            nreps= lambda wildcards: config["simulation_parameters"]["number_of_replicates"][str(wildcards.sim)],
+            library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
+            pe= lambda wildcards: "" if config["simulation_parameters"]["pe"][str(wildcards.sim)] else "--singleend",
+            extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
+        shell:
+            """
+            chmod +x {params.rscript}
+            {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
+            -n {params.nreps} -l {params.library_size} {params.pe} {params.extra} 1> {log} 2>&1
+            """
+
+
+else:
+
+    rule simulate_fastas:
+        input:
+            fasta="results/make_simulation_transcriptome/transcriptome_sim.fasta",
+            counts="results/filter_annotation/transcript_read_counts.csv",
+        output:
+            sim=SIMULATION_OUTPUT
+        threads: 1
+        log:
+            "logs/simulate_fastas/simulate_fastas.log"
+        conda:
+            "../envs/simulate.yaml"
+        params:
+            rscript=workflow.source_path("../scripts/simulate.R"),
+            nreps=config["number_of_replicates"],
+            library_size=config["library_size"],
+            pe= lambda wildcards: "" if config["PE"] else "--singleend",
+            extra=SIMULATION_PARAMS
+        shell:
+            """
+            chmod +x {params.rscript}
+            {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
+            -n {params.nreps} -l {params.library_size} {params.pe} {params.extra} 1> {log} 2>&1
+            """
 

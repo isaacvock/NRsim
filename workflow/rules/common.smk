@@ -5,21 +5,28 @@ import math
 
 ### Simulation output
 
+SIM_NAMES = list(config['simulation_params']['number_of_replicates'].keys())
+
+
 if config["read_2"]:
 
     READS = ['1', '2']
 
-    SIMULATION_PARAMS = config["simulate_fastas_params"]
+    PE_input = True
+  
 
-    PE = True
+    SIMULATION_PARAMS = config["simulate_fastas_params"]
 
 else:
 
     READS = ['1']
 
+    PE_input = False
+
     SIMULATION_PARAMS = config["simulate_fastas_params"] + " --singleend"
 
-    PE = False
+
+PE = config["PE"]
 
 
 def generate_formatted_list(n):
@@ -29,16 +36,40 @@ def generate_formatted_list(n):
 
 sample_names = generate_formatted_list(config["number_of_replicates"])
 
-if PE:
+if config["simulation_parameters"]:
 
-    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
-                                SID = sample_names,
-                                READS = READS)
+    def get_simulation_output(wildcards):
+
+        if config["simulation_parameters"]["pe"][str(wildcards.sim)]:
+
+            READS_SIM = ['1', '2']
+
+
+            SIMULATION_DATASET = expand("results/simulate_fastas/{SIM}/sample_{SID}_{READS}.fasta", 
+                                        SIM = wildcards.sim,
+                                        SID = sample_names,
+                                        READS = READS_SIM)
+
+        else:
+
+            SIMULATION_DATASET = expand("results/simulate_fastas/{SIM}/sample_{SID}.fasta", 
+                                        SIM = wildcards.sim,
+                                        SID = sample_names)
+
+        return SIMULATION_DATASET
 
 else:
 
-    SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
-                                SID = sample_names)
+    if PE:
+
+        SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}_{READS}.fasta", 
+                                    SID = sample_names,
+                                    READS = READS)
+
+    else:
+
+        SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
+                                    SID = sample_names)
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
@@ -51,7 +82,7 @@ else:
     INDEX_PATH = str(config["indices"]) + "/"
 
 # Get input fastq files for first step
-if PE:
+if PE_input:
 
     FASTQ_FILES = [config["read_1"], config["read_2"]]
 
@@ -73,7 +104,7 @@ is_gz = any([is_gz, test_gz])
 ### SALMON HELPERS
 
 # Libtype string
-if PE:
+if PE_input:
 
     if config["strandedness"] == "reverse":
 
@@ -112,13 +143,32 @@ def get_target_output():
 
         target.append(expand("results/fastqc/read{read}.html", read = READS))
 
-    if PE:
 
-        target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READS))
+    if config["simulation_parameters"]:
+
+        for s in SIM_NAMES:
+
+            if config["simulation_parameters"]["pe"][s]:
+
+                target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz", sim = s, 
+                                                                                                    sample = generate_formatted_list(config["simulation_parameters"]["number_of_replicates"][s]), 
+                                                                                                    read = ['1', '2']))
+
+            else:
+
+                target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz", sim = s, 
+                                                                                                    sample = generate_formatted_list(config["simulation_parameters"]["number_of_replicates"][s])))
+
 
     else:
 
-        target.append(expand("results/convert_to_fastq/sample_{sample}.fastq.gz", sample = sample_names))
+        if PE:
+
+            target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READS))
+
+        else:
+
+            target.append(expand("results/convert_to_fastq/sample_{sample}.fastq.gz", sample = sample_names))
 
     return target
 

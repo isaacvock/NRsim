@@ -4,6 +4,12 @@ import argparse
 import os
 import random
 
+dict = {"a": 1, "c": 2}
+
+key = "a"
+
+dict[key]
+
 def modify_nucleotides(sequence):
     """ Modify nucleotides in the sequence based on the given probability. """
     modified_sequence = ""

@@ -16,7 +16,7 @@ if is_gz:
             "../scripts/pigz.py"
 
 ## Trim adapters
-if PE:
+if PE_input:
 
     if is_gz:
 

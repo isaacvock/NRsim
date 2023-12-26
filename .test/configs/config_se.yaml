@@ -40,6 +40,11 @@ library_size: 10000
 # q-score ASCII value to imput
 qscore_impute: "I"
 
+
+# OPTIONAL: Path to csv file with parameters for different simulation iterations
+simulation_parameters: 
+
+
 # Path to Salmon indices
   # Will be created at this directory if not already present
 indices: "indices/"

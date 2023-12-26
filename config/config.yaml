@@ -33,8 +33,11 @@ read_1: "path/to/read_1.fastq"
 read_2: ""
 
 
-
 ### Key simulation details
+
+# Simulate paired-end data?
+PE: True
+
 
 # Number of replicates to simulate
 number_of_replicates: 3
@@ -47,6 +50,26 @@ library_size: 10000000
 # q-score ASCII value to imput
 qscore_impute: "I"
 
+
+# OPTIONAL: For if you want simulate multiple different datasets 
+# with different simulation parameters. Give each dataset a keyword name
+# (e.g., sim1) and provide a value for each parameter value for each dataset.
+simulation_parameters: 
+  number_of_replicates:
+    sim_1: 3
+    sim_2: 1
+  library_size:
+    sim_1: 10000000
+    sim_2: 20000000
+  qscore_imput:
+    sim_1: "I"
+    sim_2: "I"
+  pe:
+    sim_1: True
+    sim_2: False
+  extra_params:
+    sim_1: ""
+    sim_2: ""
 
 
 ### Salmon parameters to get transcript abundances for simulation
