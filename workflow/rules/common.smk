@@ -5,7 +5,9 @@ import math
 
 ### Simulation output
 
-SIM_NAMES = list(config['simulation_parameters']['number_of_replicates'].keys())
+if config["simulation_parameters"]:
+
+    SIM_NAMES = list(config['simulation_parameters']['number_of_replicates'].keys())
 
 
 if config["read_2"]:

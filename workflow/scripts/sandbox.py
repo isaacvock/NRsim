@@ -4,7 +4,10 @@ import argparse
 import os
 import random
 
-dict = {"a": 1, "c": 2}
+dict = {"a": {"ab": 1, "ac": 2}, "c": {"cb": 1, "c": 2}}
+
+dict["a"].keys()
+
 
 key = "a"
 
