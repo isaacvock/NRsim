@@ -124,6 +124,8 @@ else:
 
 def get_target_output():
 
+    target = []
+
     if config["run_fastqc"]:
 
         target.append(expand("results/fastqc/read{read}.html", read = READS))
