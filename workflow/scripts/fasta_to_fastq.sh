@@ -10,6 +10,7 @@ pyscript=$4
 kinetics=$5
 output=$6
 PE=$7
+dir=$8
 
 echo "Set safety mode"
 
@@ -19,42 +20,42 @@ set -e
 
 if [ "$PE" = "True" ]; then
 
-    read=$8
+    read=$9
 
     # Use seqtk to convert fasta file to fastq
-    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample"_"$read".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample"_"$read".*.fasta
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample"_"$read".{#}.fastq" ::: "$dir"/sample_"$sample"_"$read".*.fasta
 
 
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics" ::: "$dir"/sample_"$sample"_"$read".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
-    cat ./results/convert_to_fastq/sample_"$sample"_"$read".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
+    cat "$dir"/sample_"$sample"_"$read".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
 
     ## Clean up temp files
-    rm -f ./results/convert_to_fastq/sample_"$sample"_"$read".*.fastq
+    rm -f "$dir"/sample_"$sample"_"$read".*.fastq
 
 
 else
 
     # Use seqtk to convert fasta to fastq
-    parallel -j $cpus "seqtk seq -F '$qscore' {1} > ./results/convert_to_fastq/sample_"$sample".{#}.fastq" ::: ./results/simulate_fastas/sample_"$sample".*.fasta
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample".{#}.fastq" ::: "$dir"/sample_"$sample".*.fasta
 
 
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics" ::: ./results/convert_to_fastq/sample_"$sample".*.fastq
+                                                -k $kinetics" ::: "$dir"/sample_"$sample".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
-    cat ./results/convert_to_fastq/sample_"$sample".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
+    cat "$dir"/sample_"$sample".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
 
     # Clean up temp files
-    rm -f ./results/convert_to_fastq/sample_"$sample".*.fastq
+    rm -f "$dir"/sample_"$sample".*.fastq
 
 
 

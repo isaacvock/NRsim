@@ -57,7 +57,8 @@ if config["simulation_parameters"]:
             shell:
                 """
                 chmod +x {params.shellscript}
-                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
+                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
+                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {wildcards.read} 1> {log} 2>&1
                 """
 
     else:
@@ -98,7 +99,8 @@ if config["simulation_parameters"]:
             shell:
                 """
                 chmod +x {params.shellscript}
-                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
+                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
+                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {wildcards.read} 1> {log} 2>&1
                 """
 
 else:
@@ -141,7 +143,8 @@ else:
             shell:
                 """
                 chmod +x {params.shellscript}
-                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} {wildcards.read} 1> {log} 2>&1
+                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
+                {output.fastq} {params.PE} ./results/simulate_fastas/ {wildcards.read} 1> {log} 2>&1
                 """
 
 
@@ -183,7 +186,8 @@ else:
             shell:
                 """
                 chmod +x {params.shellscript}
-                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} {output.fastq} {params.PE} DUMMY 1> {log} 2>&1
+                {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
+                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/ DUMMY 1> {log} 2>&1
                 """
 
 
