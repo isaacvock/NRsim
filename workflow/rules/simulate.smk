@@ -43,7 +43,9 @@ if config["simulation_parameters"]:
             fasta="results/make_simulation_transcriptome/transcriptome_sim.fasta",
             counts="results/filter_annotation/transcript_read_counts.csv",
         output:
-            sim=get_simulation_output,
+            sim=expand("results/simulate_fastas/{{sim}}/sample_{SID}{READS}.fasta", 
+                        SID = sample_names,
+                        READS = lambda wildcards: ["_1", "_2"] if config["simulation_parameters"]["pe"][str(wildcards.sim)] else ""),
         threads: 1
         log:
             "logs/simulate_fastas/{sim}/simulate_fastas.log"
@@ -58,7 +60,7 @@ if config["simulation_parameters"]:
         shell:
             """
             chmod +x {params.rscript}
-            {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
+            {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/{wildcards.sim} \
             -n {params.nreps} -l {params.library_size} {params.pe} {params.extra} 1> {log} 2>&1
             """
 
