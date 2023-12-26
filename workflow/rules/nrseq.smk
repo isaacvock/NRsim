@@ -25,7 +25,7 @@ if config["simulation_parameters"]:
             input:
                 fasta="results/simulate_fastas/{sim}/sample_{sample}_{read}.fasta",
             output:
-                expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
+                temp(expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/{sim}/sample_{sample}_read_{read}.log"
             params:
@@ -41,7 +41,7 @@ if config["simulation_parameters"]:
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=temp(expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
+                fasta=expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz",
             log:
@@ -109,7 +109,7 @@ else:
             input:
                 fasta="results/simulate_fastas/sample_{sample}_{read}.fasta",
             output:
-                expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
+                temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/sample_{sample}_read_{read}.log"
             params:
@@ -125,7 +125,7 @@ else:
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
+                fasta=expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz",
             log:
