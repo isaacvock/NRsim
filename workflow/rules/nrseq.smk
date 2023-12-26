@@ -49,7 +49,7 @@ if config["simulation_parameters"]:
             qscore=config["qscore_impute"],
             shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
             pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
-            PE = PE
+            PE = lambda wildcards: config["simulation_parameters"]["pe"][str(wildcards.sim)],
         conda:
             "../envs/fastq.yaml"
         threads: 32

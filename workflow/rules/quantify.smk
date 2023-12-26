@@ -71,7 +71,7 @@ rule index:
 
 
 
-if PE:
+if PE_input:
 
     rule quant:
         input:

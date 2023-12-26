@@ -28,6 +28,8 @@ read_1: "data/WT1/WT1_test_R1.fastq.gz"
   # Empty string if using single-end fastq as input
 read_2: "data/WT1/WT1_test_R2.fastq.gz"
 
+# Simulate paired-end data?
+PE: True
 
 # Number of replicates to simulate
 number_of_replicates: 3

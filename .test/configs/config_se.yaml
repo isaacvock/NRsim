@@ -29,6 +29,10 @@ read_1: "data/WT1/WT1_test_R1.fastq.gz"
 read_2: ""
 
 
+# Simulate paired-end data?
+PE: False
+
+
 # Number of replicates to simulate
 number_of_replicates: 3
 
