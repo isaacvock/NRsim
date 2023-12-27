@@ -64,7 +64,7 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
                 newness = random.random() < transcript_to_fn[transcript_id]
                 if newness:
                     # Modify the sequence
-                    record.seq = Seq(modify_nucleotides(str(record.seq), read = read))
+                    record.seq = Seq(modify_nucleotides(str(record.seq), read = read, mutrate = mutrate))
 
             # Write the record to the output file
             SeqIO.write(record, output_handle, "fastq")
