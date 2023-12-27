@@ -51,6 +51,7 @@ if config["simulation_parameters"]:
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
                 PE = PE,
+                mutrate = lambda wildcards: config["simulation_parameters"]["s4U_mutation_rate"][str(wildcards.sim)]
             conda:
                 "../envs/fastq.yaml"
             threads: 32
@@ -58,7 +59,7 @@ if config["simulation_parameters"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {wildcards.read} 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
                 """
 
     else:
@@ -93,6 +94,7 @@ if config["simulation_parameters"]:
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
                 PE = PE,
+                mutrate = lambda wildcards: config["simulation_parameters"]["s4U_mutation_rate"][str(wildcards.sim)]
             conda:
                 "../envs/fastq.yaml"
             threads: 32
@@ -100,7 +102,7 @@ if config["simulation_parameters"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {wildcards.read} 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
                 """
 
 else:
@@ -136,7 +138,8 @@ else:
                 qscore=config["qscore_impute"],
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
-                PE = PE
+                PE = PE,
+                mutrate = config["s4U_mutation_rate"]
             conda:
                 "../envs/fastq.yaml"
             threads: 32
@@ -144,7 +147,7 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/simulate_fastas/ {wildcards.read} 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/simulate_fastas/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
                 """
 
 
@@ -179,7 +182,8 @@ else:
                 qscore=config["qscore_impute"],
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
-                PE = PE
+                PE = PE,
+                mutrate = config["s4U_mutation_rate"]
             conda:
                 "../envs/fastq.yaml"
             threads: 32
@@ -187,10 +191,5 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/ DUMMY 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/ {params.mutrate} DUMMY 1> {log} 2>&1
                 """
-
-
-
-
-#rule make_nrseq_fastq:

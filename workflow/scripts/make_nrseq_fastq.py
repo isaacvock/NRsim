@@ -13,6 +13,8 @@ requiredNamed.add_argument('-k', '--kinetics', type=str, required=True, metavar 
                     help='csv file with kinetic parameters for each transcript to derive fraction new from')
 parser.add_argument('-r', "--read", default=1, type=int, metavar = '<int>', choices=[1, 2],
                     help='Read 1 or 2?')
+parser.add_argument('-m', '--mutrate', default=0.05, type=float,
+                    help='s4U labeled read mutation rate')
 
 args = parser.parse_args()
 
@@ -23,7 +25,7 @@ inputName = args.fastq.split('.fastq')[0]
 outputName = inputName + '.nrseq.fastq'
 
 
-def modify_nucleotides(sequence, read):
+def modify_nucleotides(sequence, read, mutrate):
     """ Modify nucleotides in the sequence based on the given probability. """
 
     if read == 1:
@@ -31,7 +33,7 @@ def modify_nucleotides(sequence, read):
         modified_sequence = ""
         for nucleotide in sequence:
             if nucleotide == 'T':
-                modified_sequence += 'C' if random.random() < 0.05 else 'T'
+                modified_sequence += 'C' if random.random() < mutrate else 'T'
             else:
                 modified_sequence += nucleotide
         return modified_sequence
@@ -41,12 +43,12 @@ def modify_nucleotides(sequence, read):
         modified_sequence = ""
         for nucleotide in sequence:
             if nucleotide == 'G':
-                modified_sequence += 'A' if random.random() < 0.05 else 'G'
+                modified_sequence += 'A' if random.random() < mutrate else 'G'
             else:
                 modified_sequence += nucleotide
         return modified_sequence
 
-def process_fastq(csv_file, fastq_file, output_fastq, read):
+def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
     # Load the CSV file
     df = pd.read_csv(csv_file)
     transcript_to_fn = dict(zip(df['transcript_id'], df['fn']))
@@ -68,4 +70,4 @@ def process_fastq(csv_file, fastq_file, output_fastq, read):
             SeqIO.write(record, output_handle, "fastq")
 
 # Make NR-seq fastqs
-process_fastq(args.kinetics, args.fastq, str(outputName), args.read)
+process_fastq(args.kinetics, args.fastq, str(outputName), args.read, args.mutrate)

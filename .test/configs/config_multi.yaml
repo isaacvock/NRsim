@@ -56,6 +56,9 @@ simulation_parameters:
   extra_params:
     sim_1: ""
     sim_2: ""
+  s4U_mutation_rate:
+    sim_1: 0.05
+    sim_2: 0.1
 
 
 # Path to Salmon indices

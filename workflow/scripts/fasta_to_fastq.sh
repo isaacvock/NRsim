@@ -11,6 +11,7 @@ kinetics=$5
 output=$6
 PE=$7
 dir=$8
+mutrate=$9
 
 echo "Set safety mode"
 
@@ -20,7 +21,7 @@ set -e
 
 if [ "$PE" = "True" ]; then
 
-    read=$9
+    read=${10}
 
     # Use seqtk to convert fasta file to fastq
     parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample"_"$read".{#}.fastq" ::: "$dir"/sample_"$sample"_"$read".*.fasta
@@ -29,7 +30,7 @@ if [ "$PE" = "True" ]; then
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics -r $read" ::: "$dir"/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics -r $read -m $mutrate" ::: "$dir"/sample_"$sample"_"$read".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
@@ -48,7 +49,7 @@ else
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics" ::: "$dir"/sample_"$sample".*.fastq
+                                                -k $kinetics -m $mutrate" ::: "$dir"/sample_"$sample".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
