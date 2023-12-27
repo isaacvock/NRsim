@@ -24,7 +24,7 @@ rule make_transcriptome_fasta:
         fasta=config["genome"],
         annotation="results/modify_annotation/modified_annotation.gtf",
     output:
-        records=config["transcriptome"],
+        records="results/make_transcriptome_fasta/transcriptome.fasta",
     threads: 1
     log:
         "logs/make_transcriptome_fasta/gffread.log",
@@ -41,7 +41,7 @@ rule make_transcriptome_fasta:
 # Never make decoy index because I want to quantify intronic content accurately
 rule index:
     input:
-        sequences=config["transcriptome"],
+        sequences="results/make_transcriptome_fasta/transcriptome.fasta",
     output:
         multiext(
             INDEX_PATH,
