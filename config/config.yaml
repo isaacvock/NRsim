@@ -17,11 +17,16 @@
 ### Files to create annotation and read counts for simulation
 
 # Path to annotation file
-annotation: "path/to/annotation.gtf"
+annotation: "data/annotation/annotation.gtf"
 
 
 # Path to genome fasta file
 genome: "data/genome/genome.fasta"
+
+
+# Path to transcriptome fasta file
+  # Created as part of pipelien if it does not already exist
+transcriptome: "data/annotation/transcriptome.gtf"
 
 
 # Path to fastq file to inspire simulated data
