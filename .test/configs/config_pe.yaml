@@ -20,6 +20,11 @@ annotation: "data/annotation/genome.gtf"
 genome: data/genome/genome.fasta 
 
 
+# Path to transcriptome fasta file
+  # Created as part of pipelien if it does not already exist
+transcriptome: "data/annotation/transcriptome.gtf"
+
+
 # Path to fastq file to inspire simulated data
 read_1: "data/WT1/WT1_test_R1.fastq.gz"
 
