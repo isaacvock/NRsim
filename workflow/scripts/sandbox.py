@@ -6,6 +6,14 @@ import random
 
 dict = {"a": {"ab": 1, "ac": 2}, "c": {"cb": 1, "c": 2}}
 
+if dict["a"]:
+     
+     print("good")
+
+else:
+     
+     print("bad")
+
 dict["a"].keys()
 
 

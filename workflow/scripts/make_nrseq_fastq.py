@@ -11,7 +11,8 @@ requiredNamed.add_argument('-f', '--fastq', type=str, required=True, metavar = '
                     help='FASTQ file to introduce mutations in')
 requiredNamed.add_argument('-k', '--kinetics', type=str, required=True, metavar = 'kinetics.csv',
                     help='csv file with kinetic parameters for each transcript to derive fraction new from')
-
+parser.add_argument('-r', "--read", default=1, type=int, metavar = '<int>', choices=[1, 2],
+                    help='Read 1 or 2?')
 
 args = parser.parse_args()
 
@@ -22,17 +23,30 @@ inputName = args.fastq.split('.fastq')[0]
 outputName = inputName + '.nrseq.fastq'
 
 
-def modify_nucleotides(sequence):
+def modify_nucleotides(sequence, read):
     """ Modify nucleotides in the sequence based on the given probability. """
-    modified_sequence = ""
-    for nucleotide in sequence:
-        if nucleotide == 'T':
-            modified_sequence += 'C' if random.random() < 0.05 else 'T'
-        else:
-            modified_sequence += nucleotide
-    return modified_sequence
 
-def process_fastq(csv_file, fastq_file, output_fastq):
+    if read == 1:
+
+        modified_sequence = ""
+        for nucleotide in sequence:
+            if nucleotide == 'T':
+                modified_sequence += 'C' if random.random() < 0.05 else 'T'
+            else:
+                modified_sequence += nucleotide
+        return modified_sequence
+    
+    else:
+
+        modified_sequence = ""
+        for nucleotide in sequence:
+            if nucleotide == 'G':
+                modified_sequence += 'A' if random.random() < 0.05 else 'G'
+            else:
+                modified_sequence += nucleotide
+        return modified_sequence
+
+def process_fastq(csv_file, fastq_file, output_fastq, read):
     # Load the CSV file
     df = pd.read_csv(csv_file)
     transcript_to_fn = dict(zip(df['transcript_id'], df['fn']))
@@ -48,10 +62,10 @@ def process_fastq(csv_file, fastq_file, output_fastq):
                 newness = random.random() < transcript_to_fn[transcript_id]
                 if newness:
                     # Modify the sequence
-                    record.seq = Seq(modify_nucleotides(str(record.seq)))
+                    record.seq = Seq(modify_nucleotides(str(record.seq), read = read))
 
             # Write the record to the output file
             SeqIO.write(record, output_handle, "fastq")
 
 # Make NR-seq fastqs
-process_fastq(args.kinetics, args.fastq, str(outputName))
+process_fastq(args.kinetics, args.fastq, str(outputName), args.read)

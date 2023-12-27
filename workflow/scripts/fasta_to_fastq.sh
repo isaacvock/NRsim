@@ -29,7 +29,7 @@ if [ "$PE" = "True" ]; then
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics" ::: "$dir"/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics -r $read" ::: "$dir"/sample_"$sample"_"$read".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
