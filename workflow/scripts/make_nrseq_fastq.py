@@ -42,8 +42,8 @@ def modify_nucleotides(sequence, read, mutrate):
 
         modified_sequence = ""
         for nucleotide in sequence:
-            if nucleotide == 'G':
-                modified_sequence += 'A' if random.random() < mutrate else 'G'
+            if nucleotide == 'A':
+                modified_sequence += 'G' if random.random() < mutrate else 'A'
             else:
                 modified_sequence += nucleotide
         return modified_sequence
