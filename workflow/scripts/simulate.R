@@ -35,6 +35,9 @@ option_list <- list(
   make_option(c("-p", "--singleend"),
               action = "store_false",
               default = TRUE,
+              help = "Simulate pre-mRNA"),
+  make_option(c("-m", "--premRNA", type = "character"),
+              default = "True",
               help = "Simulate single end data rather than paired-end"),
   make_option(c("-l", "--librarysize", type = "double"),
               default = 10000000,
@@ -52,6 +55,14 @@ opt <- parse_args(opt_parser) # Load options from command line.
 # Load read counts
 normalized_reads <- read_csv(opt$counts)
 
+
+# Remove those full gene transcripts if necessary
+if(opt$premRNA == "False"){
+  
+  normalized_reads <- normalized_reads %>%
+    filter(!grepl(".I", transcript_id))
+  
+}
 
 # vector of reads
 reads_per_transcript <- ceiling(normalized_reads$norm_reads * opt$librarysize)

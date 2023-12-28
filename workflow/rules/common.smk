@@ -59,6 +59,18 @@ else:
                                 SID = sample_names)
 
 
+### Simulation details
+
+if config["simulate_premRNA"]:
+
+    SIMULATION_ANNOTATION = "results/filter_annotation/filtered_annotation.gtf"
+
+else:
+
+    SIMULATION_ANNOTATION = "results/filter_annotation/filtered_annotation_nointron.gtf"
+
+
+
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
 
 # Make life easier for users and catch if they add a '/' at the end of their path

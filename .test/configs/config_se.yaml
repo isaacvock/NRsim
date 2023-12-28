@@ -49,6 +49,8 @@ library_size: 10000
 # q-score ASCII value to imput
 qscore_impute: "I"
 
+# Whether or not to simulate intronic coverage
+simulate_premRNA: True
 
 # s4U labeled RNA read mutation rate
 s4U_mutation_rate: 0.05

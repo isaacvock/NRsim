@@ -56,6 +56,10 @@ number_of_replicates: 3
 library_size: 10000000
 
 
+# Whether or not to simulate intronic coverage
+simulate_premRNA: True
+
+
 # q-score ASCII value to imput
 qscore_impute: "I"
 

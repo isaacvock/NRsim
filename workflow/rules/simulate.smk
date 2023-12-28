@@ -23,7 +23,7 @@ rule filter_annotation:
 rule make_simulation_transcriptome:
     input:
         fasta=config["genome"],
-        annotation="results/filter_annotation/filtered_annotation.gtf",
+        annotation=SIMULATION_ANNOTATION,
     output:
         records="results/make_simulation_transcriptome/transcriptome_sim.fasta",
     threads: 1
@@ -59,12 +59,13 @@ if config["simulation_parameters"]:
                 rscript=workflow.source_path("../scripts/simulate.R"),
                 nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
+                sim_premrna = config["simulate_premRNA"],
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
             shell:
                 """
                 chmod +x {params.rscript}
                 {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/{wildcards.sim} \
-                -n {params.nreps} -l {params.library_size} {params.extra} 1> {log} 2>&1
+                -n {params.nreps} -l {params.library_size} -m {params.sim_premrna} {params.extra} 1> {log} 2>&1
                 """
 
     else:
@@ -85,13 +86,13 @@ if config["simulation_parameters"]:
                 rscript=workflow.source_path("../scripts/simulate.R"),
                 nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
-                pe= "--singleend",
+                sim_premrna = config["simulate_premRNA"],
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
             shell:
                 """
                 chmod +x {params.rscript}
                 {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/{wildcards.sim} \
-                -n {params.nreps} -l {params.library_size} {params.pe} {params.extra} 1> {log} 2>&1
+                -n {params.nreps} -l {params.library_size} --singleend {params.extra} 1> {log} 2>&1
                 """
         
 
@@ -113,6 +114,7 @@ else:
             rscript=workflow.source_path("../scripts/simulate.R"),
             nreps=config["number_of_replicates"],
             library_size=config["library_size"],
+            sim_premrna = config["simulate_premRNA"],
             pe= lambda wildcards: "" if config["PE"] else "--singleend",
             extra=config["simulate_fastas_params"]
         shell:
