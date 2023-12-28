@@ -60,7 +60,9 @@ normalized_reads <- read_csv(opt$counts)
 if(opt$premRNA == "False"){
   
   normalized_reads <- normalized_reads %>%
-    filter(!grepl(".I", transcript_id))
+    filter(!grepl(".I", transcript_id)) %>%
+    ungroup() %>%
+    mutate(norm_reads = norm_reads/sum(norm_reads))
   
 }
 
