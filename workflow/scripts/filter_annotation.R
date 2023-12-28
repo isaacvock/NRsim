@@ -25,6 +25,8 @@ option_list <- list(
               help = "Path to RNA-seq read counts for simulation"),
   make_option(c("-o", "--output", type = "character"),
               help = "Path to modified annotation output"),
+  make_option(c("-n", "--nointron", type = "character"),
+              help = "Path to modified annotation output without introns"),
   make_option(c("-t", "--tpm", type = "double"),
               default = 3,
               help = "Minimum TPM required to keep transcript")
@@ -196,6 +198,17 @@ mcols(final_gr) <- gtf_filter %>%
 
 rtracklayer::export(final_gr, con = opt$output)
 
+
+# Export intronless annotation
+final_gr <- GRanges(seqnames = Rle(gtf_filter_t$seqnames),
+                    ranges = IRanges(gtf_filter_t$start, end = gtf_filter_t$end),
+                    strand = Rle(gtf_filter_t$strand))
+
+mcols(final_gr) <- gtf_filter_t %>%
+  dplyr::select(-seqnames, -start, -end, -strand, -width)
+
+
+rtracklayer::export(final_gr, con = opt$nointron)
 
 
 # Generate read counts to be used in simulation

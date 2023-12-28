@@ -5,6 +5,7 @@ rule filter_annotation:
     output:
         filtered="results/filter_annotation/filtered_annotation.gtf",
         counts="results/filter_annotation/transcript_read_counts.csv",
+        nointron="results/filter_annotation/filtered_annotation_nointron.gtf",
     params:
         rscript=workflow.source_path("../scripts/filter_annotation.R"),
         extra=config["filter_annotation_params"]
@@ -16,7 +17,7 @@ rule filter_annotation:
         """
         chmod +x {params.rscript}
         {params.rscript} -g {input.gtf} -q {input.quantification} \
-        -c {output.counts} -o {output.filtered} {params.extra} 1> {log} 2>&1
+        -c {output.counts} -o {output.filtered} -n {output.nointron} {params.extra} 1> {log} 2>&1
         """
 
 rule make_simulation_transcriptome:
