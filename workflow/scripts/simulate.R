@@ -56,13 +56,11 @@ opt <- parse_args(opt_parser) # Load options from command line.
 normalized_reads <- read_csv(opt$counts)
 
 
-# Remove those full gene transcripts if necessary
+# (Mostly) remove those full gene transcripts if necessary
 if(opt$premRNA == "False"){
   
   normalized_reads <- normalized_reads %>%
-    filter(!grepl(".I", transcript_id)) %>%
-    ungroup() %>%
-    mutate(norm_reads = norm_reads/sum(norm_reads))
+    mutate(norm_reads = ifelse(grepl(".I", transcript_id), 0.001/opt$librarysize, norm_reads))
   
 }
 
