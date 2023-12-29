@@ -215,6 +215,11 @@ rtracklayer::export(final_gr, con = opt$nointron)
 
 normalized_reads <- quant_filter %>%
   ungroup() %>%
-  mutate(norm_reads = (NumReads + 1) / sum(NumReads + 1))
+  group_by(gene_id) %>%
+  mutate(TPM_adj = ifelse(grepl(".I", transcript_id), 
+                          TPM,
+                          TPM + sum(TPM[grepl(".I", transcript_id)]))) %>%
+  mutate(NumReads_adj = NumReads*(TPM_adj/TPM)) %>%                       
+  mutate(norm_reads = (NumReads_adj + 1) / sum(NumReads_adj + 1))
 
 write_csv(normalized_reads, file = opt$counts)
