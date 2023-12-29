@@ -78,7 +78,7 @@ if config["dataset_specific"]:
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}
+                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -123,7 +123,7 @@ else:
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}
+                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -167,7 +167,7 @@ else:
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}
+                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
                 """
 
         rule convert_to_fastq:

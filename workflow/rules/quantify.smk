@@ -15,7 +15,7 @@ rule modify_annotation:
     shell:
         """
         chmod +x {params.rscript}
-        {params.rscript} -g {input.gtf} -o {output.mod_gtf} {params.extra}
+        {params.rscript} -g {input.gtf} -o {output.mod_gtf} {params.extra}  1> {log} 2>&1
         """
 
 # Make transcriptome fasta from genome fasta + gtf
