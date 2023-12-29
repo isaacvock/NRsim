@@ -60,6 +60,8 @@ s4U_mutation_rate: 0.05
 simulation_parameters: 
 
 
+dataset_specific: False
+
 # Path to Salmon indices
   # Will be created at this directory if not already present
 indices: "indices/"

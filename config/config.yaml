@@ -66,6 +66,8 @@ qscore_impute: "I"
 # s4U labeled RNA read mutation rate
 s4U_mutation_rate: 0.05
 
+# Simulate different datasets with different simulation parameters?
+dataset_specific: True
 
 # OPTIONAL: For if you want simulate multiple different datasets 
 # with different simulation parameters. Give each dataset a keyword name
@@ -80,6 +82,9 @@ simulation_parameters:
   s4U_mutation_rate:
     sim_1: 0.05
     sim_2: 0.1
+  simulate_premRNA:
+    sim_1: True
+    sim_2: False
   extra_params:
     sim_1: ""
     sim_2: ""

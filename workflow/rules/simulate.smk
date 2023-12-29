@@ -37,7 +37,7 @@ rule make_simulation_transcriptome:
         "../scripts/gffread.py"
 
 
-if config["simulation_parameters"]:
+if config["dataset_specific"]:
 
 
     if PE:
@@ -59,7 +59,7 @@ if config["simulation_parameters"]:
                 rscript=workflow.source_path("../scripts/simulate.R"),
                 nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
-                sim_premrna = config["simulate_premRNA"],
+                sim_premrna = lambda wildcards: config["simulation_parameters"]["simulate_premRNA"][str(wildcards.sim)],
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
             shell:
                 """
@@ -86,7 +86,7 @@ if config["simulation_parameters"]:
                 rscript=workflow.source_path("../scripts/simulate.R"),
                 nreps= config["number_of_replicates"],
                 library_size= lambda wildcards: config["simulation_parameters"]["library_size"][str(wildcards.sim)],
-                sim_premrna = config["simulate_premRNA"],
+                sim_premrna = lambda wildcards: config["simulation_parameters"]["simulate_premRNA"][str(wildcards.sim)],
                 extra= lambda wildcards: config["simulation_parameters"]["extra_params"][str(wildcards.sim)]
             shell:
                 """

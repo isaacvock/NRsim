@@ -54,6 +54,8 @@ simulate_premRNA: False
 s4U_mutation_rate: 0.05
 
 
+dataset_specific: False
+
 # OPTIONAL: Path to csv file with parameters for different simulation iterations
 simulation_parameters: 
 

@@ -17,7 +17,7 @@ rule generate_transcript_kinetics:
         {params.rscript} -c {input.counts} -o {output.kinetics} {params.extra} 1> {log} 2>&1
         """
 
-if config["simulation_parameters"]:
+if config["dataset_specific"]:
 
     if PE:
 

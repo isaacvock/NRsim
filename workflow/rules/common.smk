@@ -5,7 +5,7 @@ import math
 
 ### Simulation output
 
-if config["simulation_parameters"]:
+if config["dataset_specific"]:
 
     SIM_NAMES = list(config['simulation_parameters']['library_size'].keys())
 
@@ -57,18 +57,6 @@ else:
 
     SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
                                 SID = sample_names)
-
-
-### Simulation details
-
-if config["simulate_premRNA"]:
-
-    SIMULATION_ANNOTATION = "results/filter_annotation/filtered_annotation.gtf"
-
-else:
-
-    SIMULATION_ANNOTATION = "results/filter_annotation/filtered_annotation_nointron.gtf"
-
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
@@ -143,7 +131,7 @@ def get_target_output():
         target.append(expand("results/fastqc/read{read}.html", read = READS))
 
 
-    if config["simulation_parameters"]:
+    if config["dataset_specific"]:
 
 
         if PE:
