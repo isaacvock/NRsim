@@ -23,7 +23,7 @@ rule filter_annotation:
 rule make_simulation_transcriptome:
     input:
         fasta=config["genome"],
-        annotation=SIMULATION_ANNOTATION,
+        annotation="results/filter_annotation/filtered_annotation.gtf",
     output:
         records="results/make_simulation_transcriptome/transcriptome_sim.fasta",
     threads: 1
