@@ -111,17 +111,12 @@ filtered_out <- salmon_quant %>%
   inner_join(gene_to_tscript, 
              by = "transcript_id") %>%
   group_by(gene_id) %>%
-  summarise(extra_intronic = sum(NumReads))
-
-message("opt$tpm is:")
-print(opt$tpm)
+  summarise(extra_intronic = sum(TPM))
 
 
-message("First part of filtering:")
 salmon_quant %>%
   filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0)
 
-message("2nd part of filtering:")
 salmon_quant %>%
   filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0) %>%
   mutate(transcript_id = Name) %>%
@@ -129,18 +124,15 @@ salmon_quant %>%
   inner_join(gene_to_tscript, 
              by = "transcript_id")
 
-message("filtered_out looks like:")
-
-head(filtered_out)
 
 
 quant_filter <- quant_filter %>%
   left_join(filtered_out,
              by = "gene_id") %>%
   mutate(extra_intronic = ifelse(is.na(extra_intronic), 0, extra_intronic)) %>%
-  mutate(NumReads = ifelse(grepl(".I", transcript_id),
-                           NumReads + extra_intronic,
-                           NumReads))
+  mutate(TPM = ifelse(grepl(".I", transcript_id),
+                           TPM + extra_intronic + 0.1,
+                           TPM))
 
 message("quant_filter after filtering looks like:")
 
@@ -219,7 +211,7 @@ normalized_reads <- quant_filter %>%
   mutate(TPM_adj = ifelse(grepl(".I", transcript_id), 
                           TPM,
                           TPM + sum(TPM[grepl(".I", transcript_id)]))) %>%
-  mutate(NumReads_adj = NumReads*(TPM_adj/TPM)) %>%                       
+  mutate(NumReads_adj = NumReads*(TPM_adj/TPM)) %>%
   mutate(norm_reads = (NumReads_adj + 1) / sum(NumReads_adj + 1))
 
 write_csv(normalized_reads, file = opt$counts)
