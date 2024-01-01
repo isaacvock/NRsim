@@ -92,7 +92,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.rscript}
                 {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/{wildcards.sim} \
-                -n {params.nreps} -l {params.library_size} --singleend {params.extra} 1> {log} 2>&1
+                -n {params.nreps} -l {params.library_size} -m {params.sim_premrna} --singleend {params.extra} 1> {log} 2>&1
                 """
         
 
@@ -121,6 +121,6 @@ else:
             """
             chmod +x {params.rscript}
             {params.rscript} -f {input.fasta} -c {input.counts} -o ./results/simulate_fastas/ \
-            -n {params.nreps} -l {params.library_size} {params.pe} {params.extra} 1> {log} 2>&1
+            -n {params.nreps} -l {params.library_size} -m {params.sim_premrna} {params.pe} {params.extra} 1> {log} 2>&1
             """
 

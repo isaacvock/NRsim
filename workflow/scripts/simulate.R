@@ -51,6 +51,10 @@ opt <- parse_args(opt_parser) # Load options from command line.
 # Modify annotation ------------------------------------------------------------
 
 
+# Check parameters
+message("Parameters in `opt` are:")
+print(opt)
+
 
 # Load read counts
 normalized_reads <- read_csv(opt$counts)
