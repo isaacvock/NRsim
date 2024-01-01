@@ -211,6 +211,7 @@ normalized_reads <- quant_filter %>%
   mutate(TPM_adj = ifelse(grepl(".I", transcript_id), 
                           TPM,
                           TPM + sum(TPM[grepl(".I", transcript_id)]))) %>%
+  ungroup() %>%
   mutate(NumReads_adj = NumReads*(TPM_adj/TPM)) %>%
   mutate(norm_reads = (NumReads_adj + 1) / sum(NumReads_adj + 1))
 
