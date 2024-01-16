@@ -30,7 +30,7 @@ option_list <- list(
   make_option(c("-t", "--tpm", type = "double"),
               default = 3,
               help = "Minimum TPM required to keep transcript"),
-  make_option(c("-i", "--introndiff", type = double),
+  make_option(c("-i", "--introndiff", type = "double"),
               default = 1,
               help = "Minimum fraction difference between intronic coverage
               and least abundant transcript.")
