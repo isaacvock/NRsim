@@ -29,7 +29,11 @@ option_list <- list(
               help = "Path to modified annotation output without introns"),
   make_option(c("-t", "--tpm", type = "double"),
               default = 3,
-              help = "Minimum TPM required to keep transcript")
+              help = "Minimum TPM required to keep transcript"),
+  make_option(c("-i", "--introndiff", type = double),
+              default = 1,
+              help = "Minimum fraction difference between intronic coverage
+              and least abundant transcript.")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -47,15 +51,6 @@ gtf <- as_tibble(rtracklayer::import(opt$gtf))
 salmon_quant <- fread(opt$quant)
 
 
-message("gtf looks like:")
-
-head(gtf)
-
-
-message("salmon_quant looks like:")
-
-head(salmon_quant)
-
 # Filter out low abundance transcripts
 quant_filter <- salmon_quant %>%
   filter(TPM >= opt$tpm | grepl(".I", Name)) %>%
@@ -69,17 +64,9 @@ gene_to_tscript <- gtf %>%
   dplyr::select(gene_id, transcript_id, location) %>%
   dplyr::distinct()
 
-message("quant_filter before inner_join looks like:")
-
-head(quant_filter)
-
 quant_filter <- quant_filter %>%
   inner_join(gene_to_tscript,
              by = "transcript_id")
-
-message("quant_filter after inner_join looks like:")
-
-head(quant_filter)
 
 # filter out genes with overestimated intronic content
 weird_genes <- quant_filter %>%
@@ -114,17 +101,6 @@ filtered_out <- salmon_quant %>%
   summarise(extra_intronic = sum(TPM))
 
 
-salmon_quant %>%
-  filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0)
-
-salmon_quant %>%
-  filter(TPM < opt$tpm & !grepl(".I", Name) & TPM > 0) %>%
-  mutate(transcript_id = Name) %>%
-  dplyr::select(-Name) %>%
-  inner_join(gene_to_tscript, 
-             by = "transcript_id")
-
-
 
 quant_filter <- quant_filter %>%
   left_join(filtered_out,
@@ -134,50 +110,20 @@ quant_filter <- quant_filter %>%
                            TPM + extra_intronic + 0.1,
                            TPM))
 
-message("quant_filter after filtering looks like:")
-
-head(quant_filter)
 
 
 # Create filtered annotation
 transcript_keep <- quant_filter %>%
-  filter(!grepl(".I", transcript_id)) %>%
   dplyr::select(transcript_id) %>%
   dplyr::distinct() %>%
   unlist() %>%
   unname()
 
-gene_keep <- quant_filter %>%
-  dplyr::select(gene_id) %>%
-  dplyr::distinct() %>%
-  unlist() %>%
-  unname()
 
-message("transcript_keep looks like:")
-head(transcript_keep)
-
-message("gene_keep looks like:")
-head(gene_keep)
-
-
-
-gtf_filter_t <- gtf %>%
-  filter(transcript_id %in% transcript_keep)
-
-gtf_filter_i <- gtf %>%
-  filter(grepl(".I", transcript_id) & gene_id %in% gene_keep)
-
-message("gtfs look like:")
-head(gtf_filter_t)
-head(gtf_filter_i)
-
-gtf_filter <- bind_rows(gtf_filter_t, gtf_filter_i) %>%
+gtf_filter <- gtf %>%
+  filter(transcript_id %in% transcript_keep) %>%
   filter(type %in% c("transcript", "exon"))
 
-
-
-message("gtf_filter looks like:")
-head(gtf_filter)
 
 # Export filtered annotation
 final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
@@ -210,7 +156,7 @@ normalized_reads <- quant_filter %>%
   group_by(gene_id) %>%
   mutate(TPM_adj = ifelse(grepl(".I", transcript_id), 
                           TPM,
-                          TPM + sum(TPM[grepl(".I", transcript_id)]))) %>%
+                          TPM + sum(TPM[grepl(".I", transcript_id)])*opt$introndiff )) %>%
   ungroup() %>%
   mutate(NumReads_adj = NumReads*(TPM_adj/TPM)) %>%
   mutate(norm_reads = (NumReads_adj + 1) / sum(NumReads_adj + 1))
