@@ -137,20 +137,26 @@ def get_target_output():
         if PE:
 
             target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz", sim = SIM_NAMES, sample = sample_names, read = READS))
+            target.append(expand("results/shuffle_fastq/{sim}/sample_{sample}_{read}.fastq.gz", sim = SIM_NAMES, sample = sample_names, read = READS))
 
         else:
 
             target.append(expand("results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz", sim = SIM_NAMES, sample = sample_names))
+            target.append(expand("results/shuffle_fastq/{sim}/sample_{sample}.fastq.gz", sim = SIM_NAMES, sample = sample_names))
+            
 
     else:
 
         if PE:
 
             target.append(expand("results/convert_to_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READS))
+            target.append(expand("results/shuffle_fastq/sample_{sample}_{read}.fastq.gz", sample = sample_names, read = READS))
 
         else:
 
             target.append(expand("results/convert_to_fastq/sample_{sample}.fastq.gz", sample = sample_names))
+            target.append(expand("results/shuffle_fastq/sample_{sample}.fastq.gz", sample = sample_names))
+
 
     return target
 
