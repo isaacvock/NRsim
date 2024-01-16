@@ -12,3 +12,5 @@ dependencies:
   - pigz
   - parallel
   - seqtk
+  - gawk
+  - coreutils
