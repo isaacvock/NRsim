@@ -124,6 +124,9 @@ gtf_filter <- gtf %>%
   filter(transcript_id %in% transcript_keep) %>%
   filter(type %in% c("transcript", "exon"))
 
+gtf_filter_t <- gtf_filter %>%
+  filter(!grepl(".I", transcript_id))
+
 
 # Export filtered annotation
 final_gr <- GRanges(seqnames = Rle(gtf_filter$seqnames),
