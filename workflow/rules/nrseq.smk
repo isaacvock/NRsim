@@ -193,3 +193,22 @@ else:
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
                 {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/ {params.mutrate} DUMMY 1> {log} 2>&1
                 """
+
+
+# if PE:
+
+#     shuffle_fastq:
+#         input:
+#             expand("results/convert_to_fastq/sample_{{sample}}_{READ}.fastq.gz", READ = ['1', '2']),
+#         output:
+#             read1 = "results/shuffle_fastq/sample_{sample}_1.fastq.gz",
+#             read2 = "results/shuffle_fastq/sample_{sample}_1.fastq.gz"
+#         conda:
+#             "../envs/fastq.yaml"
+#         threads: 1
+#         shell:
+#             """
+#             """
+
+
+# else:
