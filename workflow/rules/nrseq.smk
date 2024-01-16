@@ -201,14 +201,41 @@ else:
 #         input:
 #             expand("results/convert_to_fastq/sample_{{sample}}_{READ}.fastq.gz", READ = ['1', '2']),
 #         output:
+#             tread1 = temp("results/shuffle_fastq/sample_{sample}_1.fastq"),
+#             tread2 = temp("results/shuffle_fastq/sample_{sample}_2.fastq"),
 #             read1 = "results/shuffle_fastq/sample_{sample}_1.fastq.gz",
-#             read2 = "results/shuffle_fastq/sample_{sample}_1.fastq.gz"
+#             read2 = "results/shuffle_fastq/sample_{sample}_2.fastq.gz",
+#         log:
+#             "logs/shuffle_fastq/sample_{sample}.log",
 #         conda:
 #             "../envs/fastq.yaml"
+#         params:
+#             shellscript = workflow.source_path("../scripts/shuffle_pe.sh"),
 #         threads: 1
 #         shell:
 #             """
+#             chmod +x {params.shellscript}
+#             {params.shellscript} {input} {output.tread1} {output.tread2} {output.read1} {output.read2} 1> {log} 2>&1
 #             """
 
 
 # else:
+
+#     shuffle_fastq:
+#         input:
+#             "results/convert_to_fastq/sample_{sample}.fastq.gz",
+#         output:
+#             tread = temp("results/shuffle_fastq/sample_{sample}.fastq"),
+#             read = "results/shuffle_fastq/sample_{sample}.fastq.gz",
+#         log:
+#             "logs/shuffle_fastq/sample_{sample}.log"
+#         conda:
+#             "../envs/fastq.yaml"
+#         params:
+#             shellscript = workflow.source_path("../scripts/shuffle_se.sh"),
+#         threads: 1
+#         shell:
+#             """
+#             chmod +x {params.shellscript}
+#             {params.shellscript} {input} {output.tread} {output.read} 1> {log} 2>&1
+#             """
