@@ -32,4 +32,4 @@ paste -d '\n' "$temp1" "$temp2" | \
 
     awk -v file1=$output1 -v file2=$output2 \
         'NR % 2 == 1 { print | "pigz > " file1 }
-         NR % 2 == 0 { print | "pigz > " file2 }
+         NR % 2 == 0 { print | "pigz > " file2 }'
