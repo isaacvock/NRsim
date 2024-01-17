@@ -66,10 +66,10 @@ if config["dataset_specific"]:
             input:
                 expand("results/convert_to_fastq/{{sim}}/sample_{{sample}}_{READ}.fastq.gz", READ = ['1', '2']),
             output:
-                tread1 = temp("results/shuffle_fastq/{{sim}}/sample_{sample}_1.fastq"),
-                tread2 = temp("results/shuffle_fastq/{{sim}}/sample_{sample}_2.fastq"),
-                read1 = "results/shuffle_fastq/{{sim}}/sample_{sample}_1.fastq.gz",
-                read2 = "results/shuffle_fastq/{{sim}}/sample_{sample}_2.fastq.gz",
+                tread1 = temp("results/shuffle_fastq/{sim}/sample_{sample}_1.fastq"),
+                tread2 = temp("results/shuffle_fastq/{sim}/sample_{sample}_2.fastq"),
+                read1 = "results/shuffle_fastq/{sim}/sample_{sample}_1.fastq.gz",
+                read2 = "results/shuffle_fastq/{sim}/sample_{sample}_2.fastq.gz",
             log:
                 "logs/shuffle_fastq/{sim}/sample_{sample}.log",
             conda:
