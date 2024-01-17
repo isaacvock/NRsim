@@ -123,7 +123,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} DUMMY 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
