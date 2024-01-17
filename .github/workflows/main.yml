@@ -44,3 +44,9 @@ jobs:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--configfile .test/configs/config_pe.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
+    - name: Test workflow (multi single-end)
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "--configfile .test/configs/config_multi_se.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
