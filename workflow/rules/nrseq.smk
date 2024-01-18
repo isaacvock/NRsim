@@ -38,7 +38,8 @@ if config["dataset_specific"]:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                -i sample_{wildcards.sample} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -105,7 +106,8 @@ if config["dataset_specific"]:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                -i sample_{wildcards.sample} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -172,7 +174,8 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                -i sample_{wildcards.sample} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -240,7 +243,8 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                -i sample_{wildcards.sample} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:

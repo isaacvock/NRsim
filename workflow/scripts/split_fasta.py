@@ -13,6 +13,8 @@ requiredNamed.add_argument('-f', '--fasta', type=str, required=True, metavar = '
                     help='FASTA file to split up')
 requiredNamed.add_argument('-d', '--dir', type=str, required=True, metavar = 'path/to/output_dir/',
                     help='Directory in which to save files')
+requiredNamed.add_argument('-i', '--filename', type=str, required=True, metavar = 'filename',
+                    help='Fasta filename without rest of directory')
 requiredNamed.add_argument('-r', '--reads', required=True, type=int,
                     help='Number of files to split the FASTA into')
 parser.add_argument('-n', '--nsplit', default=32, type=int,
@@ -25,7 +27,7 @@ args = parser.parse_args()
 reads_per_file = math.ceil(args.reads/args.nsplit)
 
 # name without .fasta suffix
-inputName = args.fasta.split('.fasta')[0] 
+inputName = args.filename
 
 
 def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
