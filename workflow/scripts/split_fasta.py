@@ -3,6 +3,7 @@
 from Bio import SeqIO
 import argparse
 import math
+import os
 
 
 # Parse commandline arguments
