@@ -24,7 +24,7 @@ args = parser.parse_args()
 reads_per_file = math.ceil(args.reads/args.nsplit)
 
 # name without .fasta suffix
-inputName = args.fastq.split('.fasta')[0] 
+inputName = args.fasta.split('.fasta')[0] 
 
 
 def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
