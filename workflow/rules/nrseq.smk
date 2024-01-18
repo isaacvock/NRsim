@@ -63,7 +63,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
@@ -131,7 +131,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/simulate_fastas/{wildcards.sim}/ {params.mutrate} DUMMY 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} DUMMY 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
@@ -174,7 +174,7 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/ \
                 -i sample_{wildcards.sample}_{wildcards.read} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
@@ -199,7 +199,7 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/simulate_fastas/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
@@ -243,7 +243,7 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                python {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ \
+                python {params.pyscript} -f {input.fasta} -d results/split_fastas/ \
                 -i sample_{wildcards.sample} -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
@@ -268,7 +268,7 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/simulate_fastas/ {params.mutrate} DUMMY 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} DUMMY 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
