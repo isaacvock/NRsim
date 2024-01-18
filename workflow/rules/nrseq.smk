@@ -66,10 +66,10 @@ if config["dataset_specific"]:
             input:
                 expand("results/convert_to_fastq/{{sim}}/sample_{{sample}}_{READ}.fastq.gz", READ = ['1', '2']),
             output:
-                tread1 = temp("results/shuffle_fastq/{sim}/{sample}/read_1.fastq"),
-                tread2 = temp("results/shuffle_fastq/{sim}/{sample}/read_2.fastq"),
-                read1 = "results/shuffle_fastq/{sim}/{sample}/read_1.fastq.gz",
-                read2 = "results/shuffle_fastq/{sim}/{sample}/read_2.fastq.gz",
+                tread1 = temp("results/shuffle_fastq/{sim}/sample_{sample}/read_1.fastq"),
+                tread2 = temp("results/shuffle_fastq/{sim}/sample_{sample}/read_2.fastq"),
+                read1 = "results/shuffle_fastq/{sim}/sample_{sample}/read_1.fastq.gz",
+                read2 = "results/shuffle_fastq/{sim}/sample_{sample}/read_2.fastq.gz",
             log:
                 "logs/shuffle_fastq/{sim}/sample_{sample}.log",
             conda:
@@ -130,8 +130,8 @@ if config["dataset_specific"]:
             input:
                 "results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz",
             output:
-                tread = temp("results/shuffle_fastq/{sim}/{sample}/read_1.fastq"),
-                read = "results/shuffle_fastq/{sim}/{sample}/read_1.fastq.gz",
+                tread = temp("results/shuffle_fastq/{sim}/sample_{sample}/read_1.fastq"),
+                read = "results/shuffle_fastq/{sim}/sample_{sample}/read_1.fastq.gz",
             log:
                 "logs/shuffle_fastq/{sim}/sample_{sample}.log"
             conda:
@@ -194,10 +194,10 @@ else:
             input:
                 expand("results/convert_to_fastq/sample_{{sample}}_{READ}.fastq.gz", READ = ['1', '2']),
             output:
-                tread1 = temp("results/shuffle_fastq/{sample}/read_1.fastq"),
-                tread2 = temp("results/shuffle_fastq/{sample}/read_2.fastq"),
-                read1 = "results/shuffle_fastq/{sample}/read_1.fastq.gz",
-                read2 = "results/shuffle_fastq/{sample}/read_2.fastq.gz",
+                tread1 = temp("results/shuffle_fastq/sample_{sample}/read_1.fastq"),
+                tread2 = temp("results/shuffle_fastq/sample_{sample}/read_2.fastq"),
+                read1 = "results/shuffle_fastq/sample_{sample}/read_1.fastq.gz",
+                read2 = "results/shuffle_fastq/sample_{sample}/read_2.fastq.gz",
             log:
                 "logs/shuffle_fastq/sample_{sample}.log",
             conda:
@@ -259,8 +259,8 @@ else:
             input:
                 "results/convert_to_fastq/sample_{sample}.fastq.gz",
             output:
-                tread = temp("results/shuffle_fastq/{sample}/read_1.fastq"),
-                read = "results/shuffle_fastq/{sample}/read_1.fastq.gz",
+                tread = temp("results/shuffle_fastq/sample_{sample}/read_1.fastq"),
+                read = "results/shuffle_fastq/sample_{sample}/read_1.fastq.gz",
             log:
                 "logs/shuffle_fastq/sample_{sample}.log"
             conda:
