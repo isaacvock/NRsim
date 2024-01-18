@@ -24,11 +24,10 @@ parser.add_argument('-n', '--nsplit', default=32, type=int,
 args = parser.parse_args()
 
 # Calculate the number of reads that should be in each file
-reads_per_file = math.ceil(args.reads/args.nsplit)
+reads_per_file = math.ceil(((args.reads)/(args.nsplit))/1)
 
 # name without .fasta suffix
 inputName = args.filename
-
 
 def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
     """
@@ -51,13 +50,14 @@ def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
         if file_count < num_split_files and current_entry_count >= reads_per_file:
             current_file.close()
             file_count += 1
+            print(current_entry_count)
             current_entry_count = 0
             current_file = open(os.path.join(output_dir, f'{inputName}.{file_count}.fasta'), 'w')
 
         SeqIO.write(record, current_file, "fasta")
         current_entry_count += 1
 
-
+    print(file_count)
     current_file.close()
 
 split_fasta(args.fasta, args.dir, args.nsplit, reads_per_file)
