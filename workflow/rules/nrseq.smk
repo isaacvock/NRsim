@@ -21,27 +21,30 @@ if config["dataset_specific"]:
 
     if PE:
 
-        rule split_fasta:
+        rule split_fastas:
             input:
                 fasta="results/simulate_fastas/{sim}/sample_{sample}_{read}.fasta",
             output:
-                temp(expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
+                temp(expand("results/split_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/{sim}/sample_{sample}_read_{read}.log"
             params:
-                nsub=NUMBER_SPLIT,
+                nsplit = NUMBER_SPLIT,
+                reads = lambda w: config["simulation_parameters"]["library_size"]["{}".format(w.sim)],
+                pyscript = workflow.source_path("../scripts/split_fasta.py"),
             conda:
-                "../envs/pyfasta.yaml"
+                "../envs/fastq.yaml"
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}
+                chmod +x {params.pyscript}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
                 """
 
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=expand("results/simulate_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
+                fasta=expand("results/split_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz",
             log:
@@ -85,27 +88,30 @@ if config["dataset_specific"]:
 
     else:
 
-        rule split_fasta:
+        rule split_fastas:
             input:
                 fasta="results/simulate_fastas/{sim}/sample_{sample}.fasta",
             output:
-                expand("results/simulate_fastas/{{sim}}/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
+                temp(expand("results/split_fastas/{{sim}}/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/{sim}/sample_{sample}.log"
             params:
-                nsub=NUMBER_SPLIT,
+                nsplit = NUMBER_SPLIT,
+                reads = lambda w: config["simulation_parameters"]["library_size"]["{}".format(w.sim)],
+                pyscript = workflow.source_path("../scripts/split_fasta.py"),
             conda:
-                "../envs/pyfasta.yaml"
+                "../envs/fastq.yaml"
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
+                chmod +x {params.pyscript}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
                 """
 
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=temp(expand("results/simulate_fastas/{{sim}}/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
+                fasta=expand("results/split_fastas/{{sim}}/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/{sim}/sample_{sample}.fastq.gz",
             log:
@@ -149,27 +155,30 @@ else:
 
     if PE:
 
-        rule split_fasta:
+        rule split_fastas:
             input:
                 fasta="results/simulate_fastas/sample_{sample}_{read}.fasta",
             output:
-                temp(expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
+                temp(expand("results/split_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/sample_{sample}_read_{read}.log"
             params:
-                nsub=NUMBER_SPLIT,
+                nsplit = NUMBER_SPLIT,
+                reads = config["library_size"],
+                pyscript = workflow.source_path("../scripts/split_fasta.py"),
             conda:
-                "../envs/pyfasta.yaml"
+                "../envs/fastq.yaml"
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
+                chmod +x {params.pyscript}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
                 """
 
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=expand("results/simulate_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
+                fasta=expand("results/split_fastas/sample_{{sample}}_{{read}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/sample_{sample}_{read}.fastq.gz",
             log:
@@ -214,27 +223,30 @@ else:
 
     else:
 
-        rule split_fasta:
+        rule split_fastas:
             input:
                 fasta="results/simulate_fastas/sample_{sample}.fasta",
             output:
-                temp(expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
+                temp(expand("results/split_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS)),
             log:
                 "logs/split_fasta/sample_{sample}.log"
             params:
-                nsub=NUMBER_SPLIT,
+                nsplit = NUMBER_SPLIT,
+                reads = config["library_size"],
+                pyscript = workflow.source_path("../scripts/split_fasta.py"),
             conda:
-                "../envs/pyfasta.yaml"
+                "../envs/fastq.yaml"
             threads: 1
             shell:
                 """
-                pyfasta split -n {params.nsub} {input.fasta}  1> {log} 2>&1
+                chmod +x {params.pyscript}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
                 """
 
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta=expand("results/simulate_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
+                fasta=expand("results/split_fastas/sample_{{sample}}.{ID}.fasta", ID = SPLIT_IDS),
             output:
                 fastq="results/convert_to_fastq/sample_{sample}.fastq.gz"
             log:
