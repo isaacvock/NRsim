@@ -31,15 +31,12 @@ if config["dataset_specific"]:
             params:
                 nsplit = NUMBER_SPLIT,
                 reads = lambda w: config["simulation_parameters"]["library_size"]["{}".format(w.sim)],
-                pyscript = workflow.source_path("../scripts/split_fasta.py"),
+                outdir = lambda w: "results/split_fastas/{}/".format(w.sim),
             conda:
                 "../envs/fastq.yaml"
             threads: 1
-            shell:
-                """
-                chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
-                """
+            script:
+                "../scripts/split_fasta.py"
 
         rule convert_to_fastq:
             input:
@@ -98,15 +95,12 @@ if config["dataset_specific"]:
             params:
                 nsplit = NUMBER_SPLIT,
                 reads = lambda w: config["simulation_parameters"]["library_size"]["{}".format(w.sim)],
-                pyscript = workflow.source_path("../scripts/split_fasta.py"),
+                outdir = lambda w: "results/split_fastas/{}/".format(w.sim),
             conda:
                 "../envs/fastq.yaml"
             threads: 1
-            shell:
-                """
-                chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
-                """
+            script:
+                "../scripts/split_fasta.py"
 
         rule convert_to_fastq:
             input:
@@ -165,15 +159,12 @@ else:
             params:
                 nsplit = NUMBER_SPLIT,
                 reads = config["library_size"],
-                pyscript = workflow.source_path("../scripts/split_fasta.py"),
+                outdir = lambda w: "results/split_fastas/{}/".format(w.sim),
             conda:
                 "../envs/fastq.yaml"
             threads: 1
-            shell:
-                """
-                chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
-                """
+            script:
+                "../scripts/split_fasta.py"
 
         rule convert_to_fastq:
             input:
@@ -233,15 +224,12 @@ else:
             params:
                 nsplit = NUMBER_SPLIT,
                 reads = config["library_size"],
-                pyscript = workflow.source_path("../scripts/split_fasta.py"),
+                outdir = lambda w: "results/split_fastas/{}/".format(w.sim),
             conda:
                 "../envs/fastq.yaml"
             threads: 1
-            shell:
-                """
-                chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
-                """
+            script:
+                "../scripts/split_fasta.py"
 
         rule convert_to_fastq:
             input:

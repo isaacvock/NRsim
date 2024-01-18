@@ -1,28 +1,23 @@
 from Bio import SeqIO
-import argparse
 import math
 
 
-# Parse commandline arguments
-parser = argparse.ArgumentParser(description='This is a script to convert a fasta file to a fastq file')
-requiredNamed = parser.add_argument_group('required named arguments')
-requiredNamed.add_argument('-f', '--fasta', type=str, required=True, metavar = 'in_file.fasta',
-                    help='FASTA file to split up')
-requiredNamed.add_argument('-d', '--dir', type=str, required=True, metavar = 'path/to/output_dir/',
-                    help='Directory in which to save files')
-requiredNamed.add_argument('-r', '--reads', required=True, type=int,
-                    help='Number of files to split the FASTA into')
-parser.add_argument('-n', '--nsplit', default=32, type=int,
-                    help='Number of files to split the FASTA into')
+# Process parameters
+reads = snakemake.params.get("reads")
+nsplit = snakemake.params.get("nsplit")
+outdir = snakemake.params.get("outdir")
 
 
-args = parser.parse_args()
 
 # Calculate the number of reads that should be in each file
-reads_per_file = math.ceil(args.reads/args.nsplit)
+reads_per_file = math.ceil(reads/nsplit)
+
+# Input
+fasta = snakemake.input.get("fasta")
+
 
 # name without .fasta suffix
-inputName = args.fastq.split('.fasta')[0] 
+inputName = fasta.split('.fasta')[0] 
 
 
 def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
@@ -55,4 +50,4 @@ def split_fasta(input_file, output_dir, num_split_files, reads_per_file):
 
     current_file.close()
 
-split_fasta(args.fasta, args.dir, args.nsplit, reads_per_file)
+split_fasta(fasta, outdir, nsplit, reads_per_file)
