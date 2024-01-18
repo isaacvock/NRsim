@@ -3,6 +3,7 @@ import random
 from Bio import SeqIO
 import argparse
 from Bio.Seq import Seq
+import re
 
 # Parse commandline arguments
 parser = argparse.ArgumentParser(description='This is a script to convert a fasta file to a fastq file')
@@ -57,7 +58,8 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
     with open(output_fastq, "w") as output_handle:
         for record in SeqIO.parse(fastq_file, "fastq"):
             # Find the transcript_id in the read name
-            transcript_id = next((tid for tid in transcript_to_fn if tid in record.id), None)
+            match = re.search(r'read\d+/([^;]+)', record.id)
+            transcript_id = match.group(1)
             if transcript_id:
                 
                 # Generate Bernoulli random variable
