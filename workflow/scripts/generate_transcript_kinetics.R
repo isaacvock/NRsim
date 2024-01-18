@@ -36,32 +36,51 @@ opt <- parse_args(opt_parser) # Load options from command line.
 
 # Add fraction news to simulate ------------------------------------------------
 
+### Simulation details and helper functions
+
+# Label time
 tl <- opt$labeltime
+
+# Probability that an isoforms kdeg is different from major isoform
 pkdeg_diff <- opt$pkdeg
 
+# Sigmoid function
 inv_logit <- function(x){
   return(exp(x) / (1 + exp(x)))
 }
 
+# Simulated relative abundances
 normalized_reads <- fread(opt$counts)
 
+# Gene IDs
 genes <- unique(normalized_reads$gene_id)
 
+# Number of genes
 ngenes <- length(genes)
 
+
+### Simulate
+
+# Are differences in isoform abundances kdeg driven?
 kdeg_diff <- rbinom(ngenes, size = 1, prob = pkdeg_diff)
 
+# Draw a gene-wise fraction new (technicallly fraction new of most abundant isoform)
 fn_gene <- inv_logit(rnorm(ngenes, 0, 1))
 
+# Create a table to organize all simulation details
 fns <- tibble(gene_id = genes,
               fn_gene = fn_gene,
               kdeg_diff = kdeg_diff)
 
+# Calculate transcript isoform fraction news
+  # If kdeg_diff is 1 (TRUE), then kdeg for an isoform
+  # is (kdeg of dominant isoform)*[(dominant isoform TPM) / (isoform TPM)].
+  # Else, all isoforms from a gene have same kdeg
 normalized_reads <- normalized_reads %>%
   inner_join(fns, by = "gene_id") %>%
   mutate(kdeg = -log(1 - fn_gene)/tl) %>%
   group_by(gene_id) %>%
-  mutate(kdeg_factor = ifelse(kdeg_diff == 1, TPM / max(TPM), 1)) %>%
+  mutate(kdeg_factor = ifelse(kdeg_diff == 1, max(TPM) / TPM, 1)) %>%
   mutate(kdeg = kdeg*kdeg_factor,
          fn = 1 - exp(-kdeg*tl)) %>%
   mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
