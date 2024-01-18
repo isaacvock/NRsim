@@ -172,7 +172,7 @@ NUMBER_SPLIT = 32
 num_digits = len(str(NUMBER_SPLIT))
 
 # IDS in split FASTA file sample names
-SPLIT_IDS = [str(i) for i in range(1, NUMBER_SPLIT)]
+SPLIT_IDS = [str(i) for i in range(1, NUMBER_SPLIT + 1)]
 
 ## Old SPLIT_IDS for pyfasta
 # SPLIT_IDS = [str(i).zfill(num_digits) for i in range(0, NUMBER_SPLIT)]
