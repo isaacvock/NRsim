@@ -24,7 +24,7 @@ parser.add_argument('-n', '--nsplit', default=32, type=int,
 args = parser.parse_args()
 
 # Calculate the number of reads that should be in each file
-reads_per_file = math.ceil(((args.reads)/(args.nsplit))/1)
+reads_per_file = math.ceil(((args.reads)/(args.nsplit))/2)
 
 # name without .fasta suffix
 inputName = args.filename
