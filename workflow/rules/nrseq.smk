@@ -38,7 +38,7 @@ if config["dataset_specific"]:
             shell:
                 """
                 chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -105,7 +105,7 @@ if config["dataset_specific"]:
             shell:
                 """
                 chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -172,7 +172,7 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
@@ -240,7 +240,7 @@ else:
             shell:
                 """
                 chmod +x {params.pyscript}
-                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads}
+                {params.pyscript} -f {input.fasta} -d results/split_fastas/{wildcards.sim}/ -n {params.nsplit} -r {params.reads} 1> {log} 2>&1
                 """
 
         rule convert_to_fastq:
