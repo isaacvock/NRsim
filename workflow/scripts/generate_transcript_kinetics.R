@@ -94,7 +94,8 @@ normalized_reads <- normalized_reads %>%
   mutate(kdeg = -log(1 - fn_gene)/tl) %>%
   group_by(gene_id) %>%
   mutate(kdeg_factor = ifelse(kdeg_diff == 1, max(TPM) / TPM, 1)) %>%
-  mutate(kdeg = ifelse(kdeg*kdeg_factor > opt$maxkdeg, opt$maxkdeg, kdeg*kdeg_factor),
+  rowwise() %>%
+  mutate(kdeg = ifelse(kdeg*kdeg_factor > opt$maxkdeg, runif(1, kdeg, opt$maxkdeg), kdeg*kdeg_factor),
          fn = 1 - exp(-kdeg*tl)) %>%
   mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
 
