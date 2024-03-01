@@ -54,6 +54,9 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
     df = pd.read_csv(csv_file)
     transcript_to_fn = dict(zip(df['transcript_id'], df['fn']))
 
+    # Set a seed so that read pairs have same simulated newness status
+    random.seed(42)
+
     # Process the FASTQ file
     with open(output_fastq, "w") as output_handle:
         for record in SeqIO.parse(fastq_file, "fastq"):
