@@ -57,11 +57,18 @@ else:
 ### Randomly create seed that will be set to ensure reads in pair have same newness status
 seeds = {}
 
-for sim in SIM_NAMES:
-    seeds[sim] = {}
+if config["dataset_specific"]:
+
+    for sim in SIM_NAMES:
+        seeds[sim] = {}
+
+        for samp in sample_names:
+            seeds[sim][samp] = round(random.random() * 10000000) + 1
+
+else:
 
     for samp in sample_names:
-        seeds[sim][samp] = round(random.random() * 10000000) + 1
+        seeds[samp] = round(random.random() * 10000000) + 1
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES

@@ -163,7 +163,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} DUMMY 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} DUMMY 0 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
@@ -230,6 +230,7 @@ else:
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
                 PE=PE,
+                seed=lambda wildcards: seeds[str(wildcards.sample)],
                 mutrate=config["s4U_mutation_rate"],
             conda:
                 "../envs/fastq.yaml"
@@ -238,7 +239,7 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} {input.kinetics} \
-                {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
+                {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} {wildcards.read} {params.seed} 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
@@ -316,7 +317,7 @@ else:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} DUMMY 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/ {params.mutrate} DUMMY 0 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:
