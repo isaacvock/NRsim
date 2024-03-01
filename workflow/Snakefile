@@ -1,5 +1,3 @@
-
-
 from snakemake.utils import min_version
 
 ##### set minimum snakemake version #####
@@ -29,6 +27,7 @@ container: "docker://continuumio/miniconda3"
 
 ##### load rules #####
 
+
 include: "rules/common.smk"
 include: "rules/preprocess.smk"
 include: "rules/quantify.smk"
@@ -38,6 +37,7 @@ include: "rules/nrseq.smk"
 
 ##### target rules #####
 
+
 rule all:
     input:
-        get_target_output()
+        get_target_output(),
