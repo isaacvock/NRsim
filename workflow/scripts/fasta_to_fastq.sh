@@ -12,6 +12,7 @@ output=$6
 PE=$7
 dir=$8
 mutrate=$9
+seed=${10}
 
 echo "Set safety mode"
 
@@ -30,7 +31,7 @@ if [ "$PE" = "True" ]; then
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics -r $read -m $mutrate" ::: "$dir"/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics -r $read -m $mutrate -s $seed" ::: "$dir"/sample_"$sample"_"$read".*.fastq
 
 
     # Combine NR-seq fragment fastqs and gzip

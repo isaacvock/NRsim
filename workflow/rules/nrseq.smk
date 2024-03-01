@@ -55,6 +55,7 @@ if config["dataset_specific"]:
                 shellscript=workflow.source_path("../scripts/fasta_to_fastq.sh"),
                 pythonscript=workflow.source_path("../scripts/make_nrseq_fastq.py"),
                 PE = PE,
+                seed = lambda wildcards: seeds[str(wildcards.sim)][str(wildcards.sample)],
                 mutrate = lambda wildcards: config["simulation_parameters"]["s4U_mutation_rate"][str(wildcards.sim)]
             conda:
                 "../envs/fastq.yaml"
@@ -63,7 +64,7 @@ if config["dataset_specific"]:
                 """
                 chmod +x {params.shellscript}
                 {params.shellscript} {threads} {wildcards.sample} {params.qscore} {params.pythonscript} \
-                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} 1> {log} 2>&1
+                {input.kinetics} {output.fastq} {params.PE} ./results/split_fastas/{wildcards.sim}/ {params.mutrate} {wildcards.read} {params.seed} 1> {log} 2>&1
                 """
 
         rule shuffle_fastq:

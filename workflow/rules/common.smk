@@ -1,5 +1,6 @@
 import glob
 import os
+import random
 import math
 
 
@@ -57,6 +58,18 @@ else:
 
     SIMULATION_OUTPUT = expand("results/simulate_fastas/sample_{SID}.fasta", 
                                 SID = sample_names)
+
+### Randomly create seed that will be set to ensure reads in pair have same newness status
+seeds = {}
+
+for sim in SIM_NAMES:
+
+    seeds[sim] = {}
+
+    for samp in sample_names:
+
+        seeds[sim][samp] = round(random.random()*10000000) + 1
+
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES

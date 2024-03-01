@@ -16,6 +16,8 @@ parser.add_argument('-r', "--read", default=1, type=int, metavar = '<int>', choi
                     help='Read 1 or 2?')
 parser.add_argument('-m', '--mutrate', default=0.05, type=float,
                     help='s4U labeled read mutation rate')
+parser.add_argument('-s', "--seed", default=0, type=int, metavar = '<int>',
+                    help='Seed to set to ensure that reads in pair have same newness status.')
 
 args = parser.parse_args()
 
@@ -54,8 +56,11 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
     df = pd.read_csv(csv_file)
     transcript_to_fn = dict(zip(df['transcript_id'], df['fn']))
 
-    # Set a seed so that read pairs have same simulated newness status
-    random.seed(42)
+    if args.seed > 0:
+        
+        # Set a seed so that read pairs have same simulated newness status
+        random.seed(args.seed)
+
 
     # Process the FASTQ file
     with open(output_fastq, "w") as output_handle:
