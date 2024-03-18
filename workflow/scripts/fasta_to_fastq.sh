@@ -12,7 +12,6 @@ output=$6
 PE=$7
 dir=$8
 mutrate=$9
-seed=${10}
 
 echo "Set safety mode"
 
@@ -23,6 +22,8 @@ set -e
 if [ "$PE" = "True" ]; then
 
     read=${10}
+    seed=${11}
+
 
     # Use seqtk to convert fasta file to fastq
     parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample"_"$read".{#}.fastq" ::: "$dir"/sample_"$sample"_"$read".*.fasta
