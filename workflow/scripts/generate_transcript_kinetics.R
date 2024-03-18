@@ -25,7 +25,7 @@ option_list <- list(
               default = 2,
               help = "Label time in hours"),
   make_option(c("-p", "--pkdeg", type = "numeric"),
-              default = 0.5,
+              default = 0,
               help = "Proportion of genes for which isoform abundance 
               differences are kdeg driven"),
   make_option(c("-m", "--maxkdeg", type = "numeric"),
@@ -76,7 +76,7 @@ ngenes <- length(genes)
 kdeg_diff <- rbinom(ngenes, size = 1, prob = pkdeg_diff)
 
 # Draw a gene-wise fraction new (technicallly fraction new of most abundant isoform)
-fn_gene <- inv_logit(rnorm(ngenes, 0, 1))
+fn_gene <- rep(0.5, times = ngenes)
 fn_gene <- ifelse(fn_gene > max_fn, max_fn,
                   ifelse(fn_gene < min_fn, min_fn, fn_gene))
 
