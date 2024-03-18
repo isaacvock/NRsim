@@ -126,6 +126,10 @@ else:
 def get_target_output():
     target = []
 
+    target.append(expand("wtf_{sim}_{sample}_{read}.txt",
+        sim = SIM_NAMES, sample = sample_names, read = READS))
+
+
     if config["run_fastqc"]:
         target.append(expand("results/fastqc/read{read}.html", read=READS))
 
