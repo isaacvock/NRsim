@@ -52,7 +52,10 @@ if config["dataset_specific"]:
         rule convert_to_fastq:
             input:
                 kinetics="results/generate_transcript_kinetics/kinetics.csv",
-                fasta="results/simulate_fastas/{sim}/sample_{sample}_{read}.fasta",
+                fasta=expand(
+                    "results/split_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta",
+                    ID=SPLIT_IDS,
+                ),
             output:
                 fastq="results/convert_to_fastq/{sim}/sample_{sample}_{read}.fastq.gz",
             log:
