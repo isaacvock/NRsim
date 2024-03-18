@@ -25,17 +25,17 @@ if [ "$PE" = "True" ]; then
     read=${10}
 
     # Use seqtk to convert fasta file to fastq
-    parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample"_"$read".{#}.fastq" ::: "$dir"/sample_"$sample"_"$read".*.fasta
+    parallel -j $cpus "seqtk seq -F '$qscore' {1} > "$dir"/sample_"$sample"_"$read".fastq" ::: "$dir"/sample_"$sample"_"$read".fasta
 
 
 
     # Introduce T-to-C mutations in fastq file to simulate NR-seq data
     parallel -j $cpus "python $pyscript -f {1} \
-                                                -k $kinetics -r $read -m $mutrate -s $seed" ::: "$dir"/sample_"$sample"_"$read".*.fastq
+                                                -k $kinetics -r $read -m $mutrate -s $seed" ::: "$dir"/sample_"$sample"_"$read".fastq
 
 
     # Combine NR-seq fragment fastqs and gzip
-    cat "$dir"/sample_"$sample"_"$read".*.nrseq.fastq | pigz -c -p $cpus > "$output" 
+    cat "$dir"/sample_"$sample"_"$read".nrseq.fastq | pigz -c -p $cpus > "$output" 
 
     ## Clean up temp files
     rm -f "$dir"/sample_"$sample"_"$read".*.fastq
