@@ -63,12 +63,12 @@ if config["dataset_specific"]:
         seeds[sim] = {}
 
         for samp in sample_names:
-            seeds[sim][samp] = round(random.random() * 10000000) + 1
+            seeds[sim][samp] = 42 # round(random.random() * 10000000) + 1
 
 else:
 
     for samp in sample_names:
-        seeds[samp] = round(random.random() * 10000000) + 1
+        seeds[samp] = 42 # round(random.random() * 10000000) + 1
 
 
 ### GENERAL HELPER FUNCTIONS/VARIABLES USED IN ALL CASES
