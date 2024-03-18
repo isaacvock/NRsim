@@ -25,7 +25,7 @@ if [ "$PE" = "True" ]; then
     read=${10}
 
     # Use seqtk to convert fasta file to fastq
-    seqtk seq -F '$qscore' "$dir"/sample_"$sample"_"$read".fasta "$dir"/sample_"$sample"_"$read".fastq
+    seqtk seq -F '$qscore' "$dir"/sample_"$sample"_"$read".fasta > "$dir"/sample_"$sample"_"$read".fastq
 
 
     python $pyscript -f "$dir"/sample_"$sample"_"$read".fastq -k $kinetics -r $read -m $mutrate -s $seed
