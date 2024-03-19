@@ -71,7 +71,7 @@ if config["dataset_specific"]:
                 ][str(wildcards.sim)],
             conda:
                 "../envs/fastq.yaml"
-            threads: 1
+            threads: 32
             shell:
                 """
                 chmod +x {params.shellscript}

@@ -63,8 +63,17 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
 
 
     # Process the FASTQ file
+    count = 1
     with open(output_fastq, "w") as output_handle:
         for record in SeqIO.parse(fastq_file, "fastq"):
+
+            if count == 1:
+
+                print('Name of first read is:')
+                print(record.id)
+                print('Seed for first read is:')
+                print(random.seed())
+
             # Find the transcript_id in the read name
             match = re.search(r'read\d+/([^;]+)', record.id)
             transcript_id = match.group(1)
