@@ -69,10 +69,12 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
 
             if count == 1:
 
+                rcheck = random.random()
+
                 print('Name of first read is:')
                 print(record.id)
                 print('Seed for first read is:')
-                print(random.seed())
+                print(rcheck)
 
             count = count + 1
             # Find the transcript_id in the read name
