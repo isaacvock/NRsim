@@ -25,9 +25,11 @@ if config["dataset_specific"]:
             input:
                 fasta="results/simulate_fastas/{sim}/sample_{sample}_{read}.fasta",
             output:
-                expand(
-                    "results/split_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta",
-                    ID=SPLIT_IDS,
+                temp(
+                    expand(
+                        "results/split_fastas/{{sim}}/sample_{{sample}}_{{read}}.{ID}.fasta",
+                        ID=SPLIT_IDS,
+                    )
                 ),
             log:
                 "logs/split_fasta/{sim}/sample_{sample}_read_{read}.log",
