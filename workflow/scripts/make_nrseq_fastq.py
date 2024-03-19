@@ -74,6 +74,7 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
                 print('Seed for first read is:')
                 print(random.seed())
 
+            count = count + 1
             # Find the transcript_id in the read name
             match = re.search(r'read\d+/([^;]+)', record.id)
             transcript_id = match.group(1)
