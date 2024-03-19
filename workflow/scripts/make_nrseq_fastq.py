@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+from numpy.random import Generator, PCG64
 from Bio import SeqIO
 import argparse
 from Bio.Seq import Seq
@@ -58,20 +59,25 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
 
     if args.seed > 0:
         
-        # Set a seed so that read pairs have same simulated newness status
-        random.seed(args.seed)
+        # Need to get consistent random number generation
+        rg = Generator(PCG64(args.seed))
 
+    else:
+
+        rg = Generator(PCG64())
 
     # Process the FASTQ file
+    count = 1
     with open(output_fastq, "w") as output_handle:
         for record in SeqIO.parse(fastq_file, "fastq"):
+
             # Find the transcript_id in the read name
             match = re.search(r'read\d+/([^;]+)', record.id)
             transcript_id = match.group(1)
             if transcript_id:
                 
                 # Generate Bernoulli random variable
-                newness = random.random() < transcript_to_fn[transcript_id]
+                newness = rg.uniform(0, 1, 1) < transcript_to_fn[transcript_id]
                 if newness:
                     # Modify the sequence
                     record.seq = Seq(modify_nucleotides(str(record.seq), read = read, mutrate = mutrate))
