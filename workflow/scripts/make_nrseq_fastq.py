@@ -67,7 +67,7 @@ def process_fastq(csv_file, fastq_file, output_fastq, read, mutrate):
     with open(output_fastq, "w") as output_handle:
         for record in SeqIO.parse(fastq_file, "fastq"):
 
-            if count == 1:
+            if count == 15:
 
                 rcheck = random.random()
 
