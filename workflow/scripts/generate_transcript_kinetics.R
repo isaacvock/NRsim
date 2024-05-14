@@ -22,18 +22,27 @@ option_list <- list(
   make_option(c("-o", "--output", type = "character"),
               help = "Path to modified annotation output"),
   make_option(c("-t", "--labeltime", type = "numeric"),
-              default = 2,
-              help = "Label time in hours"),
+              default = 4.5,
+              help = "Label time in hours. NOTE: the distribution of simulated 
+              fraction news is not affected by this parameter. It only affects
+              the conversion of simulated fraction new to kdeg."),
   make_option(c("-p", "--pkdeg", type = "numeric"),
               default = 0.5,
               help = "Proportion of genes for which isoform abundance 
               differences are kdeg driven"),
-  make_option(c("-m", "--maxkdeg", type = "numeric"),
-              default = 2.5,
-              help = "Maximum simulated kdeg allowed (in hr-1)"),
-  make_option(c("-n", "--minkdeg", type = "numeric"),
-              default = 0.005,
-              help = "Minimum simulated kdeg allowed")
+  make_option(c("-m", "--maxfn", type = "numeric"),
+              default = 0.99,
+              help = "Maximum simulated fraction new allowed."),
+  make_option(c("-n", "--minfn", type = "numeric"),
+              default = 0.01,
+              help = "Minimum simulated fraction new allowed."),
+  make_option(c("-f", "--avglfn", type = "numeric"),
+              default = 0,
+              help = "Average logit(fraction new) of dominant isoforms."),
+  make_option(c("-s", "--sdlfn", type = "numeric"),
+              default = 0.5,
+              help = "Standard deviation of logit(fraction new) 
+              of dominant isoforms.")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -49,8 +58,8 @@ tl <- opt$labeltime
 
 
 # What are min and max fns?
-min_fn <- 1 - exp(-opt$minkdeg*tl)
-max_fn <- 1 - exp(-opt$maxkdeg*tl)
+min_fn <- opt$minfn
+max_fn <- opt$maxfn
 
 # Probability that an isoforms kdeg is different from major isoform
 pkdeg_diff <- opt$pkdeg
@@ -72,13 +81,36 @@ ngenes <- length(genes)
 
 ### Simulate
 
-# Are differences in isoform abundances kdeg driven?
-kdeg_diff <- rbinom(ngenes, size = 1, prob = pkdeg_diff)
 
 # Draw a gene-wise fraction new (technicallly fraction new of most abundant isoform)
-fn_gene <- inv_logit(rnorm(ngenes, 0, 1))
+fn_gene <- inv_logit(rnorm(ngenes, opt$avglfn, opt$sdlfn))
 fn_gene <- ifelse(fn_gene > max_fn, max_fn,
                   ifelse(fn_gene < min_fn, min_fn, fn_gene))
+
+# Adjust pkdeg_diff so that expected value of kdeg diffs = original pkdeg_diff
+nwithinbounds <- sum(!(fn_gene %in% c(max_fn, min_fn)))
+
+if (nwithinbounds > 0) {
+
+  pkdeg_diff <- pkdeg_diff * (ngenes / nwithinbounds)
+
+  if (pkdeg_diff > 1) {
+    pkdeg_diff <- 1
+  }
+
+}else {
+
+  stop("There are no gene-wide fraction news not equal to the upper or lower bound
+  on the fraction new. Did you make sure that `avglfn` falls between `minfn` and `maxfn?")
+
+}
+
+
+# Are differences in isoform abundances kdeg driven?
+kdeg_diff <- ifelse(fn_gene %in% c(max_fn, min_fn),
+                      rbinom(ngenes, size = 1, prob = pkdeg_diff),
+                      kdeg_diff = 0)
+
 
 # Create a table to organize all simulation details
 fns <- tibble(gene_id = genes,
