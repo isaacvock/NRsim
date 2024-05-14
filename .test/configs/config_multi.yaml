@@ -63,7 +63,7 @@ simulation_parameters:
     sim_1: "I"
     sim_2: "I"
   extra_params:
-    sim_1: ""
+    sim_1: "-r 75"
     sim_2: ""
   simulate_premRNA:
     sim_1: True

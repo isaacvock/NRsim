@@ -104,7 +104,7 @@ filter_annotation_params: ""
 simulation_gffread_extra: ""
 
 # Extra parameters for simulation with polyester
-simulate_fastas_params: ""
+simulate_fastas_params: "-r 75"
 
 # Extra parameters for kinetics generation
 generate_transcript_kinetics_params: ""
