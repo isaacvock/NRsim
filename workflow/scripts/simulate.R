@@ -41,7 +41,10 @@ option_list <- list(
               help = "Simulate single end data rather than paired-end"),
   make_option(c("-l", "--librarysize", type = "double"),
               default = 10000000,
-              help = "Total number of reads to simulate")
+              help = "Total number of reads to simulate"),
+  make_option(c("-r", "--readlen", type = "double"),
+              default = 100,
+              help = "Read length to simulate")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -88,7 +91,8 @@ if (opt$seed < 0) {
                       fold_changes = fold_changes,
                       paired = opt$singleend,
                       error_rate = opt$error_rate,
-                      strand_specific = TRUE)
+                      strand_specific = TRUE,
+                      readlen = opt$readlen)
 
 }else {
 
@@ -100,5 +104,6 @@ if (opt$seed < 0) {
                       error_rate = opt$error_rate,
                       paired = opt$singleend,
                       strand_specific = TRUE,
-                      seed = opt$seed)
+                      seed = opt$seed,
+                      readlen = opt$readlen)
 }
