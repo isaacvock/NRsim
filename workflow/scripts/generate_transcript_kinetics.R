@@ -109,7 +109,7 @@ if (nwithinbounds > 0) {
 # Are differences in isoform abundances kdeg driven?
 kdeg_diff <- ifelse(fn_gene %in% c(max_fn, min_fn),
                       rbinom(ngenes, size = 1, prob = pkdeg_diff),
-                      kdeg_diff = 0)
+                      0)
 
 
 # Create a table to organize all simulation details
