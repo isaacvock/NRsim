@@ -40,7 +40,7 @@ option_list <- list(
               default = 0,
               help = "Average logit(fraction new) of dominant isoforms."),
   make_option(c("-s", "--sdlfn", type = "numeric"),
-              default = 0.5,
+              default = 1,
               help = "Standard deviation of logit(fraction new) 
               of dominant isoforms.")
 )
@@ -128,7 +128,7 @@ normalized_reads <- normalized_reads %>%
   mutate(kdeg_factor = ifelse(kdeg_diff == 1, max(TPM) / TPM, 1)) %>%
   rowwise() %>%
   mutate(kdeg = ifelse(1 - exp(-kdeg * kdeg_factor * tl) > opt$maxfn,
-                        runif(1, kdeg,  -log(1 - opt$maxfn)/tl),
+                        runif(1, (kdeg - log(1 - opt$maxfn)/tl)/2,  -log(1 - opt$maxfn)/tl),
                         kdeg * kdeg_factor),
          fn = 1 - exp(-kdeg*tl)) %>%
   mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
