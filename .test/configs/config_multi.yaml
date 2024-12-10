@@ -58,7 +58,7 @@ dataset_specific: True
 simulation_parameters: 
   library_size:
     sim_1: 5000
-    sim_2: 10000
+    sim_2: 2500
   qscore_impute:
     sim_1: "I"
     sim_2: "I"

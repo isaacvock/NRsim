@@ -203,7 +203,7 @@ def get_target_output():
 # Number of temporary fasta files to make
 # Hardcoding for now to maximum amount of threads allowed by rule
 # Could get fancier or allow more user specification here, but this is probably sufficient
-NUMBER_SPLIT = 32
+NUMBER_SPLIT = 8
 
 # Number of digits in number of temp files; for inferring file name
 num_digits = len(str(NUMBER_SPLIT))
