@@ -42,7 +42,13 @@ option_list <- list(
   make_option(c("-s", "--sdlfn", type = "numeric"),
               default = 1,
               help = "Standard deviation of logit(fraction new) 
-              of dominant isoforms.")
+              of dominant isoforms."),
+  make_option(c("-r", "--random", type = "numeric"),
+              default = 0,
+              help = "If set, then all isoforms are given independent kdegs
+              drawn at random from a logit-Normal distribution. There will
+              be no correlation between isoform abundance and isoform kdeg
+              in this case. 0 = FALSE; 1 = TRUE")  
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -50,6 +56,10 @@ opt <- parse_args(opt_parser) # Load options from command line.
 
 
 # Add fraction news to simulate ------------------------------------------------
+
+if(!(opt$random %in% c(0, 1))){
+  warning("--random (-r) should be 0 or 1! If not 0, treated as if it is 1!!")
+}
 
 ### Simulation details and helper functions
 
@@ -81,57 +91,82 @@ ngenes <- length(genes)
 
 ### Simulate
 
+if(opt$random == 0){
 
-# Draw a gene-wise fraction new (technicallly fraction new of most abundant isoform)
-fn_gene <- inv_logit(rnorm(ngenes, opt$avglfn, opt$sdlfn))
-fn_gene <- ifelse(fn_gene > max_fn, max_fn,
-                  ifelse(fn_gene < min_fn, min_fn, fn_gene))
+  # Draw a gene-wise fraction new (technicallly fraction new of most abundant isoform)
+  fn_gene <- inv_logit(rnorm(ngenes, opt$avglfn, opt$sdlfn))
+  fn_gene <- ifelse(fn_gene > max_fn, max_fn,
+                    ifelse(fn_gene < min_fn, min_fn, fn_gene))
 
-# Adjust pkdeg_diff so that expected value of kdeg diffs = original pkdeg_diff
-nwithinbounds <- sum(!(fn_gene %in% c(max_fn, min_fn)))
+  # Adjust pkdeg_diff so that expected value of kdeg diffs = original pkdeg_diff
+  nwithinbounds <- sum(!(fn_gene %in% c(max_fn, min_fn)))
 
-if (nwithinbounds > 0) {
+  if (nwithinbounds > 0) {
 
-  pkdeg_diff <- pkdeg_diff * (ngenes / nwithinbounds)
+    pkdeg_diff <- pkdeg_diff * (ngenes / nwithinbounds)
 
-  if (pkdeg_diff > 1) {
-    pkdeg_diff <- 1
+    if (pkdeg_diff > 1) {
+      pkdeg_diff <- 1
+    }
+
+  }else {
+
+    stop("There are no gene-wide fraction news not equal to the upper or lower bound
+    on the fraction new. Did you make sure that `avglfn` falls between `minfn` and `maxfn?")
+
   }
 
-}else {
 
-  stop("There are no gene-wide fraction news not equal to the upper or lower bound
-  on the fraction new. Did you make sure that `avglfn` falls between `minfn` and `maxfn?")
+  # Are differences in isoform abundances kdeg driven?
+  kdeg_diff <- ifelse(fn_gene %in% c(max_fn, min_fn),
+                        rbinom(ngenes, size = 1, prob = pkdeg_diff),
+                        0)
+
+
+  # Create a table to organize all simulation details
+  fns <- tibble(gene_id = genes,
+                fn_gene = fn_gene,
+                kdeg_diff = kdeg_diff)
+
+  # Calculate transcript isoform fraction news
+    # If kdeg_diff is 1 (TRUE), then kdeg for an isoform
+    # is (kdeg of dominant isoform)*[(dominant isoform TPM) / (isoform TPM)].
+    # Else, all isoforms from a gene have same kdeg
+  normalized_reads <- normalized_reads %>%
+    inner_join(fns, by = "gene_id") %>%
+    mutate(kdeg = -log(1 - fn_gene)/tl) %>%
+    group_by(gene_id) %>%
+    mutate(kdeg_factor = ifelse(kdeg_diff == 1, max(TPM) / TPM, 1)) %>%
+    rowwise() %>%
+    mutate(kdeg = ifelse(1 - exp(-kdeg * kdeg_factor * tl) > opt$maxfn,
+                          runif(1, (kdeg - log(1 - opt$maxfn)/tl)/2,  -log(1 - opt$maxfn)/tl),
+                          kdeg * kdeg_factor),
+          fn = 1 - exp(-kdeg*tl)) %>%
+    mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
+
+
+}else{
+
+  fn_isoforms <- inv_logit(rnorm(nrow(normalized_reads), opt$avglfn, opt$sdlfn))
+  fn_isoforms <- ifelse(fn_isoforms > max_fn, max_fn,
+                    ifelse(fn_isoforms < min_fn, min_fn, fn_isoforms))
+
+  nwithinbounds <- sum(!(fn_isoforms %in% c(max_fn, min_fn)))
+
+  if (nwithinbounds == 0) {
+
+    stop("There are no fraction news not equal to the upper or lower bound
+    on the fraction new. Did you make sure that `avglfn` falls between `minfn` and `maxfn?")
+
+  }
+
+
+  normalized_reads$fn <- fn_isoforms
+
+  normalized_reads <- normalized_reads %>%
+    mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
+
 
 }
-
-
-# Are differences in isoform abundances kdeg driven?
-kdeg_diff <- ifelse(fn_gene %in% c(max_fn, min_fn),
-                      rbinom(ngenes, size = 1, prob = pkdeg_diff),
-                      0)
-
-
-# Create a table to organize all simulation details
-fns <- tibble(gene_id = genes,
-              fn_gene = fn_gene,
-              kdeg_diff = kdeg_diff)
-
-# Calculate transcript isoform fraction news
-  # If kdeg_diff is 1 (TRUE), then kdeg for an isoform
-  # is (kdeg of dominant isoform)*[(dominant isoform TPM) / (isoform TPM)].
-  # Else, all isoforms from a gene have same kdeg
-normalized_reads <- normalized_reads %>%
-  inner_join(fns, by = "gene_id") %>%
-  mutate(kdeg = -log(1 - fn_gene)/tl) %>%
-  group_by(gene_id) %>%
-  mutate(kdeg_factor = ifelse(kdeg_diff == 1, max(TPM) / TPM, 1)) %>%
-  rowwise() %>%
-  mutate(kdeg = ifelse(1 - exp(-kdeg * kdeg_factor * tl) > opt$maxfn,
-                        runif(1, (kdeg - log(1 - opt$maxfn)/tl)/2,  -log(1 - opt$maxfn)/tl),
-                        kdeg * kdeg_factor),
-         fn = 1 - exp(-kdeg*tl)) %>%
-  mutate(fn = ifelse(grepl(".I", transcript_id), 1, fn))
-
 
 write_csv(normalized_reads, file = opt$output)
