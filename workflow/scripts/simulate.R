@@ -44,7 +44,10 @@ option_list <- list(
               help = "Total number of reads to simulate"),
   make_option(c("-r", "--readlen", type = "double"),
               default = 100,
-              help = "Read length to simulate")
+              help = "Read length to simulate"),
+  make_option(c("-b", "--bias", type = "character"),
+              default = "none",
+              help = "One of 'none', 'rnaf', or 'cdnaf'")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -92,6 +95,7 @@ if (opt$seed < 0) {
                       paired = opt$singleend,
                       error_rate = opt$error_rate,
                       strand_specific = TRUE,
+                      bias = opt$bias,
                       readlen = opt$readlen)
 
 }else {
@@ -105,5 +109,6 @@ if (opt$seed < 0) {
                       paired = opt$singleend,
                       strand_specific = TRUE,
                       seed = opt$seed,
+                      bias = opt$bias,
                       readlen = opt$readlen)
 }
