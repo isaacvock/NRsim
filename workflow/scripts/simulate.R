@@ -70,7 +70,10 @@ normalized_reads <- read_csv(opt$counts)
 if(opt$premRNA == "False"){
   
   normalized_reads <- normalized_reads %>%
-    mutate(norm_reads = ifelse(grepl(".I", transcript_id), 0.001/opt$librarysize, norm_reads))
+    # set pre-mRNA to practically 0
+    mutate(norm_reads = ifelse(grepl(".I", transcript_id), 0.001/opt$librarysize, norm_reads)) %>%
+    # renormalize
+    mutate(norm_reads = norm_reads / sum(norm_reads))
   
 }
 
