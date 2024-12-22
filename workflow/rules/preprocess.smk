@@ -38,7 +38,7 @@ if PE_input:
             params:
                 adapters=config["fastp_adapters"],
                 extra="",
-            threads: 2
+            threads: 20
             wrapper:
                 "v2.2.1/bio/fastp"
 
@@ -61,7 +61,7 @@ if PE_input:
             params:
                 adapters=config["fastp_adapters"],
                 extra="",
-            threads: 8
+            threads: 20
             wrapper:
                 "v2.2.1/bio/fastp"
 
@@ -82,7 +82,7 @@ else:
             params:
                 adapters=config["fastp_adapters"],
                 extra="",
-            threads: 1
+            threads: 20
             wrapper:
                 "v2.2.1/bio/fastp"
 
@@ -102,7 +102,7 @@ else:
             params:
                 adapters=config["fastp_adapters"],
                 extra="",
-            threads: 8
+            threads: 20
             wrapper:
                 "v2.2.1/bio/fastp"
 
