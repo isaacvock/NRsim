@@ -11,6 +11,7 @@ library(GenomicRanges)
 library(optparse)
 library(readr)
 library(polyester)
+library(Biostrings)
 
 # Process parameters -----------------------------------------------------------
 
@@ -66,12 +67,18 @@ print(opt)
 normalized_reads <- read_csv(opt$counts)
 
 
+# Reorder so that transcript IDs match order in FASTA
+fasta <- readDNAStringSet(opt$fasta)
+transcript_order <- names(fasta)
+gc(fasta)
+normalized_reads <- normalized_reads[match(transcript_order, normalized_reads$transcript_id), ]
+
 # (Mostly) remove those full gene transcripts if necessary
 if(opt$premRNA == "False"){
   
   normalized_reads <- normalized_reads %>%
     # set pre-mRNA to practically 0
-    mutate(norm_reads = ifelse(grepl(".I", transcript_id), 0.001/opt$librarysize, norm_reads)) %>%
+    mutate(norm_reads = ifelse(grepl(".I", transcript_id), 1e-16, norm_reads)) %>%
     # renormalize
     mutate(norm_reads = norm_reads / sum(norm_reads))
   
